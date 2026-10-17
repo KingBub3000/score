@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Score Counter is a simple, colorful score tracker for two teams. Choose team colors, set the winning score, and track points.">
+<title>Score Counter | Home</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Titan+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{--bg-top:#0bc2cf;--bg-bottom:#349aef;--accent:rgb(154,73,170);--accent-dark:rgb(122,3,157);--ink:#fff}
+*{box-sizing:border-box}html{min-height:100%}
+body{margin:0;min-height:100vh;font-family:'Nunito',sans-serif;color:#fff;background:linear-gradient(165deg,var(--bg-top),var(--bg-bottom));overflow-x:hidden;padding-left:220px;-webkit-font-smoothing:antialiased}
+body:before{content:"";position:fixed;inset:-50%;z-index:-2;pointer-events:none;opacity:.1;background-image:radial-gradient(circle,#fff 2px,transparent 3px);background-size:44px 44px;transform:rotate(15deg)}
+.background{position:fixed;inset:0;z-index:-3;background:linear-gradient(165deg,var(--bg-top),var(--bg-bottom))}
+#sidebar{position:fixed;top:0;left:0;width:220px;height:100%;background-color:var(--accent);color:#fff;z-index:800;display:flex;flex-direction:column;justify-content:space-between;padding:20px 10px 20px 0;box-shadow:inset -10px 0 rgba(0,0,0,.2);overflow:hidden auto}
+.sidebar-logo{white-space:nowrap;max-width:100%;font-size:22px;letter-spacing:0;font-family:'Titan One',sans-serif;font-size:26px;color:white;text-align:center;margin:4px auto 14px;text-shadow:2px 2px 0 rgba(0,0,0,.2);letter-spacing:.5px;user-select:none;width:90%;line-height:1.2}
+.sidebar-list{list-style:none;margin:25px 0 0;padding:0;font-size:20px;flex:1}.sidebar-list li{margin:0;padding:0}
+.sidebar-link{display:flex;flex-direction:row;align-items:center;margin:8px 0;padding:0 0 0 30px;width:190px;height:40px;border:0;border-top-right-radius:5px;border-bottom-right-radius:5px;background:transparent;color:#fff;text-decoration:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:18px;cursor:pointer;transition:background .2s linear;color .2s;box-sizing:border-box;text-align:left}
+.sidebar-link:hover{background:rgba(255,255,255,.12)}.sidebar-link.active{background:#fff;color:var(--accent)}.sidebar-listIcon{margin-top:2px;width:26px;font-size:22px;text-align:center;flex-shrink:0}.sidebar-text{margin-left:10px}
+.sidebar-footer{padding:10px 8px 18px;text-align:center;margin-top:auto}.sidebar-footer-icons{list-style:none;margin:0;padding:0;display:flex;justify-content:space-evenly;align-items:center;gap:4px}.sidebar-foot-btn{width:40px;height:40px;border:0;border-radius:10px;background:transparent;color:rgba(255,255,255,.85);display:flex;align-items:center;justify-content:center;font-size:18px}
+main{max-width:900px;width:100%;margin:0 auto;padding:clamp(28px,6vw,64px) clamp(14px,3vw,28px) 60px}
+.page{display:none;text-align:center;animation:pop .2s ease}.page.active{display:block}
+h1{font:normal clamp(38px,7vw,60px)/1.1 'Titan One',sans-serif;margin:0 0 24px;text-shadow:3px 3px 0 rgba(0,0,0,.18)}h2{font:normal 27px 'Titan One',sans-serif;margin:0 0 12px}
+.panel{max-width:760px;margin:0 auto;background:var(--accent);border:6px solid rgba(255,255,255,.23);border-radius:16px;padding:clamp(20px,4vw,34px);box-shadow:5px 6px 0 rgba(0,0,0,.14);text-align:left}.panel p{font-size:17px;line-height:1.7;margin:0 0 14px}.panel p:last-child{margin-bottom:0}
+.score-intro{font-weight:800;opacity:.95;margin:-10px 0 22px}
+.settings{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:0 auto 22px}.setting{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.13);border:2px solid rgba(255,255,255,.2);border-radius:10px;padding:9px 12px;font-weight:900}
+select,input[type=number]{font:800 14px Nunito,sans-serif;border:2px solid rgba(255,255,255,.55);border-radius:7px;padding:7px 8px;background:white;color:#333;max-width:145px}input[type=number]{width:72px}
+.scoreboard{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.team{--team:#f59e0b;--team-dark:#c46b00;background:var(--team);border:6px solid rgba(255,255,255,.38);border-radius:16px;padding:20px 16px 22px;box-shadow:0 7px 0 var(--team-dark);transition:background .15s;min-width:0}.team h2{font-size:clamp(18px,3vw,27px);overflow-wrap:anywhere}.score{font:normal clamp(70px,13vw,112px)/1.1 'Titan One',sans-serif;text-shadow:3px 3px rgba(0,0,0,.16);margin:14px 0}
+.btn{font:900 15px Nunito,sans-serif;color:#fff;background:rgba(255,255,255,.16);border:3px solid rgba(255,255,255,.34);border-radius:10px;padding:10px 17px;cursor:pointer;transition:.15s}.btn:hover:not(:disabled){background:rgba(255,255,255,.28);transform:translateY(-1px)}.btn:disabled{opacity:.5;cursor:not-allowed}.team .btn{width:100%;background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.5);font-size:16px;padding:13px 8px}.team .btn:active:not(:disabled){transform:translateY(3px)}
+.team-score-controls{display:flex;gap:8px;width:100%;align-items:stretch}.team-score-controls .btn:not(.score-minus){flex:1;min-width:0}.team-score-controls .score-minus{flex:0 0 58px;font-size:24px;padding:8px 10px;background:rgba(0,0,0,.2)!important;border-color:rgba(255,255,255,.45)!important}
+.score-actions{display:flex;justify-content:center;gap:12px;margin-top:28px;flex-wrap:wrap}#status{font:normal clamp(22px,4vw,30px) 'Titan One',sans-serif;margin:28px 0 0;text-shadow:2px 2px rgba(0,0,0,.15);min-height:36px}
+
+
+
+.bracket-layout{display:block}
+.bracket-setup{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,.65fr);gap:16px;margin:16px 0;text-align:left}
+.bracket-slots,.bracket-overflow{background:rgba(0,0,0,.12);border:2px solid rgba(255,255,255,.22);border-radius:12px;padding:14px;min-width:0}
+.bracket-slots h3,.bracket-overflow h3{font:normal 18px 'Titan One',sans-serif;margin:0 0 10px;text-align:center}
+.bracket-slot-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.bracket-slot{min-height:48px;padding:9px;border:2px dashed rgba(255,255,255,.4);border-radius:9px;background:rgba(255,255,255,.08);font-weight:900;display:flex;align-items:center;gap:8px;min-width:0;overflow-wrap:anywhere}
+.bracket-slot .slot-number{font-size:11px;opacity:.8;flex-shrink:0}.bracket-slot.empty{opacity:.65}.bracket-slot[draggable="true"],.overflow-player[draggable="true"]{cursor:grab;touch-action:manipulation}
+.bracket-slot.drop-target,.overflow-player.drop-target{outline:3px dashed #fff;outline-offset:2px}
+.overflow-player{padding:9px;border-radius:8px;margin:7px 0;font-weight:900;display:flex;align-items:center;gap:8px;overflow-wrap:anywhere}
+.bracket-sides{display:grid;grid-template-columns:minmax(0,1fr) minmax(160px,.7fr) minmax(0,1fr);gap:14px;align-items:start}
+.bracket-side{min-width:0;background:rgba(0,0,0,.09);border:2px solid rgba(255,255,255,.18);border-radius:12px;padding:10px}
+.bracket-side h3{font:normal 20px 'Titan One',sans-serif;text-align:center;margin:4px 0 12px}
+.bracket-round{margin:0 0 14px}.bracket-round-title{font-size:12px;text-transform:uppercase;letter-spacing:.6px;font-weight:900;opacity:.85;text-align:center;margin:8px 0}
+.bracket-dynamic-match{background:rgba(0,0,0,.12);border:2px solid rgba(255,255,255,.2);border-radius:10px;padding:9px;margin:8px 0;min-width:0}
+.bracket-dynamic-match .match-row{margin:5px 0;padding:7px;border-radius:7px;min-width:0}.bracket-dynamic-match .match-row span:first-child{min-width:0;overflow-wrap:anywhere}
+.bracket-dynamic-match .match-row .btn{padding:3px 8px;flex-shrink:0}.bracket-dynamic-match .match-result{font-size:12px;font-weight:900;text-align:center;margin-top:6px}
+.bracket-grand-final{background:rgba(255,255,255,.12);border:3px solid rgba(255,255,255,.3);border-radius:12px;padding:10px;align-self:center;min-width:0}
+.bracket-grand-final h3{font:normal 20px 'Titan One',sans-serif;text-align:center;margin:0 0 12px}
+.bracket-locked-note{font-size:13px;font-weight:800;opacity:.9;text-align:center;margin:8px 0}
+@media(max-width:760px){.bracket-setup{grid-template-columns:1fr}.bracket-sides{grid-template-columns:1fr}.bracket-slot-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.bracket-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(130px,.7fr);gap:26px;align-items:stretch;margin-top:16px}
+.bracket-column{position:relative;display:flex;flex-direction:column;gap:18px;min-width:0}
+.bracket-column>h3{font:normal 21px 'Titan One',sans-serif;margin:0;text-align:center}
+.bracket-round-one{justify-content:space-between}
+.bracket-round-one .bracket-match{min-height:150px;display:flex;align-items:center}
+.bracket-final-column{justify-content:center}
+.bracket-final-column .bracket-match{min-height:170px;display:flex;align-items:center}
+.bracket-champion-column{justify-content:center}
+.bracket-champion{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-height:140px;padding:14px;background:rgba(255,255,255,.13);border:3px dashed rgba(255,255,255,.45);border-radius:14px;text-align:center;overflow-wrap:anywhere}
+.bracket-champion i{font-size:30px}.bracket-champion strong{font:normal 22px 'Titan One',sans-serif}.bracket-champion span{font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:1px}
+.bracket-round-one .bracket-match,.bracket-final-column .bracket-match{position:relative}
+.bracket-round-one .bracket-match:after{content:"";position:absolute;right:-15px;top:50%;width:14px;border-top:2px solid rgba(255,255,255,.55)}
+.bracket-final-column .bracket-match:after{content:"";position:absolute;right:-15px;top:50%;width:14px;border-top:2px solid rgba(255,255,255,.55)}
+.bracket-match>div{width:100%;min-width:0}
+.bracket-match h3{font-size:18px}
+@media(max-width:760px){
+ .bracket-layout{grid-template-columns:1fr;gap:20px}
+ .bracket-round-one{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+ .bracket-round-one>h3{grid-column:1/-1}
+ .bracket-round-one .bracket-match:after,.bracket-final-column .bracket-match:after{display:none}
+ .bracket-final-column .bracket-match{min-height:130px}
+ .bracket-champion-column{align-items:stretch}
+ .bracket-champion{min-height:100px}
+}
+\n.game-mode-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;max-width:760px;margin:0 auto}
+.mode-card{background:var(--accent);border:6px solid rgba(255,255,255,.23);border-radius:16px;padding:24px 20px;box-shadow:5px 6px 0 rgba(0,0,0,.14);text-align:left;display:flex;flex-direction:column;gap:14px}
+.mode-card h2{margin:0}.mode-card p{font-size:16px;line-height:1.6;margin:0;flex:1}
+.game-panel{max-width:820px;margin:0 auto;background:var(--accent);border:6px solid rgba(255,255,255,.23);border-radius:16px;padding:clamp(16px,3vw,28px);box-shadow:5px 6px 0 rgba(0,0,0,.14);text-align:left}
+.game-panel h2{margin:0 0 14px}
+.game-toolbar{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin:0 auto 18px}
+.game-toolbar .setting{justify-content:center}
+.match-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.match-card{background:rgba(0,0,0,.13);border:2px solid rgba(255,255,255,.2);border-radius:12px;padding:16px;min-width:0}
+.match-card h3{font:normal 20px 'Titan One',sans-serif;margin:0 0 12px}
+.match-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:10px 0;font-weight:900}
+.match-row span:first-child{overflow-wrap:anywhere}
+.match-score{font:normal 30px 'Titan One',sans-serif;min-width:28px;text-align:center}
+.match-row .btn{padding:5px 10px}
+.bracket-player{cursor:grab;touch-action:manipulation}.bracket-player.dragging{opacity:.45}.bracket-player.drop-target{outline:3px dashed #fff;outline-offset:2px}.drag-hint{font-size:13px;font-weight:800;text-align:center;opacity:.9;margin:0 0 12px}
+.match-card .match-result{font-weight:900;margin-top:10px;min-height:24px}
+.tournament-round{margin:14px 0 22px}
+.tournament-round h3{font:normal 21px 'Titan One',sans-serif;margin:0 0 12px}
+.champion-banner{background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);border-radius:12px;padding:16px;text-align:center;font:normal 23px 'Titan One',sans-serif;margin:0 0 18px}
+.king-status{background:rgba(255,255,255,.15);border:3px solid rgba(255,255,255,.3);border-radius:14px;padding:18px;text-align:center;margin-bottom:18px}
+.king-status .role-title{font:normal 17px 'Nunito',sans-serif;font-weight:900;text-transform:uppercase;letter-spacing:1px}
+.king-status .role-name{font:normal clamp(28px,5vw,42px) 'Titan One',sans-serif;margin-top:6px}
+.player-badges{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:12px 0 20px}
+.player-badge{padding:7px 11px;border-radius:999px;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.24);font-weight:900}
+.king-scoreboard{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.king-side{border:4px solid rgba(255,255,255,.3);border-radius:14px;padding:16px;text-align:center;min-width:0}
+.king-side h3{font:normal 20px 'Titan One',sans-serif;margin:0 0 10px;overflow-wrap:anywhere}
+.king-side .score{font-size:clamp(52px,10vw,78px);margin:8px 0}
+.stats-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:20px}
+.stat-tile{background:rgba(0,0,0,.13);border:2px solid rgba(255,255,255,.2);border-radius:10px;padding:12px 8px;text-align:center}
+.stat-tile strong{display:block;font:normal 28px 'Titan One',sans-serif}
+.stat-tile span{font-size:13px;font-weight:900}
+.stats-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:15px}
+.stats-table th,.stats-table td{padding:10px 8px;text-align:left;border-bottom:1px solid rgba(255,255,255,.25)}
+.stats-table th{font-weight:900}
+.muted{opacity:.85;font-size:14px}
+@media(max-width:650px){
+ .game-mode-grid,.match-grid,.king-scoreboard{grid-template-columns:1fr}
+ .stats-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .sidebar-footer{display:block;padding:0;margin:0}
+ .sidebar-footer .sidebar-link{width:auto;padding:0 8px;margin:0;height:40px;font-size:14px}
+ .sidebar-footer .sidebar-listIcon{font-size:16px;width:auto}
+ .sidebar-footer .sidebar-text{margin-left:5px}
+ .sidebar-list{gap:2px}
+ .sidebar-link{padding:0 7px}
+}
+@media(max-width:390px){
+ .sidebar-logo{display:none}
+ .sidebar-link{font-size:12px;padding:0 5px}
+ .sidebar-footer .sidebar-link{font-size:12px;padding:0 5px}
+ .stats-table{font-size:12px}
+ .stats-table th,.stats-table td{padding:8px 4px}
+}
+
+@keyframes pop{from{opacity:.6;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:650px){body{padding-left:0;padding-top:70px}#sidebar{width:100%;height:64px;bottom:auto;right:0;padding:8px 12px;display:flex;flex-direction:row;align-items:center;box-shadow:0 5px 0 rgba(0,0,0,.12);overflow:visible}.sidebar-logo{font-size:18px;width:auto;margin:0 10px 0 0;white-space:nowrap}.sidebar-list{display:flex;gap:4px;margin:0;flex:1;justify-content:flex-end}.sidebar-link{width:auto;padding:0 10px;margin:0;height:40px;font-size:15px;border-radius:5px}.sidebar-listIcon{width:auto;font-size:16px}.sidebar-text{margin-left:6px}main{padding-top:26px}.scoreboard{gap:12px}.team{padding:16px 10px 18px}.score{margin:10px 0}.setting{width:100%;justify-content:space-between}.settings{gap:8px}.panel p{font-size:15px}.sidebar-footer{display:none}#sidebar .sidebar-footer{display:block!important}#sidebar>div:first-child{display:flex;align-items:center;flex:1;min-width:0}}
+@media(max-width:390px){.sidebar-logo{font-size:15px}.sidebar-link{font-size:13px;padding:0 7px}.sidebar-text{margin-left:4px}.sidebar-listIcon{display:none}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+
+@media(max-width:650px){#sidebar .sidebar-footer{display:block!important;padding:0;margin:0}#sidebar .sidebar-footer .sidebar-link{width:auto;padding:0 6px;margin:0;height:40px;font-size:12px}#sidebar .sidebar-footer .sidebar-listIcon{display:inline-block;width:auto;font-size:14px}#sidebar .sidebar-footer .sidebar-text{margin-left:4px}}
+
+/* Sidebar layout settings */
+body{padding:0!important;transition:padding .2s ease}
+#sidebar{transition:transform .25s ease,background-color .35s;z-index:1000}
+.menu-btn{position:fixed;top:14px;left:14px;width:46px;height:46px;border:0;border-radius:10px;background:var(--accent);color:#fff;font-size:22px;box-shadow:0 4px 0 rgba(0,0,0,.2);cursor:pointer;z-index:1100;display:flex;align-items:center;justify-content:center}
+#sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:900;display:none}
+#sidebar-overlay.open{display:block}
+body.sb-always .menu-btn{display:none!important}
+body.sb-always #sidebar-overlay{display:none!important}
+body.sb-left #sidebar{left:0;right:auto;top:0;bottom:0;transform:translateX(-105%);width:220px;height:100%;flex-direction:column;padding:20px 10px 20px 0;box-shadow:inset -10px 0 rgba(0,0,0,.2)}
+body.sb-left #sidebar.open,body.sb-left.sb-always #sidebar{transform:translateX(0)}
+body.sb-left.sb-always{padding-left:220px!important}
+body.sb-right #sidebar{left:auto;right:0;top:0;bottom:0;transform:translateX(105%);width:220px;height:100%;flex-direction:column;padding:20px 0 20px 10px;box-shadow:inset 10px 0 rgba(0,0,0,.2)}
+body.sb-right #sidebar.open,body.sb-right.sb-always #sidebar{transform:translateX(0)}
+body.sb-right.sb-always{padding-right:220px!important}
+body.sb-right .menu-btn{left:auto;right:14px}
+body.sb-right .sidebar-link{padding:0 30px 0 0;border-radius:5px 0 0 5px;margin-left:auto}
+body.sb-top #sidebar,body.sb-bottom #sidebar{left:0;right:0;width:100%;height:auto;max-height:none;transform:translateY(-120%);flex-direction:row;align-items:center;justify-content:center;gap:10px;padding:10px 14px;box-shadow:0 5px 0 rgba(0,0,0,.15);overflow-x:auto;overflow-y:hidden}
+body.sb-bottom #sidebar{top:auto;bottom:0;transform:translateY(120%);box-shadow:0 -5px 0 rgba(0,0,0,.15)}
+body.sb-top #sidebar.open,body.sb-top.sb-always #sidebar{transform:translateY(0)}
+body.sb-bottom #sidebar.open,body.sb-bottom.sb-always #sidebar{transform:translateY(0)}
+body.sb-top.sb-always{padding-top:76px!important}
+body.sb-bottom.sb-always{padding-bottom:76px!important}
+body.sb-top #sidebar>div:first-child,body.sb-bottom #sidebar>div:first-child{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:10px;min-width:0;width:auto}
+body.sb-top .sidebar-logo,body.sb-bottom .sidebar-logo{font-size:18px;margin:0;width:auto;flex-shrink:0}
+body.sb-top .sidebar-list,body.sb-bottom .sidebar-list{display:flex;flex-direction:row;align-items:center;justify-content:center;margin:0;padding:0;flex:0 1 auto;flex-wrap:nowrap;gap:6px;font-size:16px}
+body.sb-top .sidebar-link,body.sb-bottom .sidebar-link{width:44px!important;height:44px!important;padding:0!important;margin:0!important;border-radius:10px!important;justify-content:center}
+body.sb-top .sidebar-text,body.sb-bottom .sidebar-text{display:none!important}
+body.sb-top .sidebar-listIcon,body.sb-bottom .sidebar-listIcon{width:auto;margin:0;font-size:20px}
+body.sb-top .sidebar-footer,body.sb-bottom .sidebar-footer{display:flex;flex-direction:row;gap:6px;flex-shrink:0}
+body.sb-top .menu-btn{top:86px;left:14px}
+body.sb-bottom .menu-btn{top:auto;bottom:86px;left:14px}
+.settings-layout-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}
+.settings-layout-option{border:3px solid rgba(255,255,255,.25);border-radius:10px;padding:12px;background:rgba(0,0,0,.16);color:#fff;cursor:pointer;text-align:center;font:inherit;font-weight:900;transition:.15s}
+.settings-layout-option:hover{background:rgba(0,0,0,.25);transform:translateY(-1px)}
+.settings-layout-option.active{border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.22);background:rgba(255,255,255,.18)}
+.settings-layout-option i{display:block;font-size:24px;margin-bottom:7px}
+.settings-toggle-row{display:flex;align-items:center;gap:12px;margin-top:18px;padding:12px;border-radius:9px;background:rgba(0,0,0,.16);font-weight:800}
+.settings-toggle-row input{width:20px;height:20px;accent-color:#fff}
+.players-editor{display:grid;gap:12px;margin-top:16px}.player-edit-row{display:grid;grid-template-columns:minmax(100px,1fr) 54px auto;gap:10px;align-items:center;padding:12px;background:rgba(0,0,0,.14);border:2px solid rgba(255,255,255,.18);border-radius:10px;text-align:left}.player-edit-row input[type=text]{width:100%;min-width:0;padding:9px;border:2px solid rgba(255,255,255,.6);border-radius:7px;font:800 15px Nunito,sans-serif;color:#333}.player-edit-row input[type=color]{width:48px;height:40px;padding:2px;border:2px solid rgba(255,255,255,.55);border-radius:7px;background:#fff;cursor:pointer}.player-edit-row .btn{padding:7px 10px}.settings-section{margin-top:26px;padding-top:24px;border-top:2px solid rgba(255,255,255,.2)}.settings-note{font-size:14px;opacity:.9;margin-top:10px!important}
+@media(max-width:520px){.player-edit-row{grid-template-columns:minmax(80px,1fr) 44px auto;gap:7px;padding:8px}.player-edit-row .btn{font-size:13px;padding:7px}}
+@media(max-width:640px){
+ body.sb-left.sb-always,body.sb-right.sb-always{padding-left:0!important;padding-right:0!important}
+ body.sb-left.sb-always #sidebar,body.sb-right.sb-always #sidebar{width:190px}
+ body.sb-left.sb-always{padding-left:190px!important}
+ body.sb-right.sb-always{padding-right:190px!important}
+ body.sb-top.sb-always,body.sb-bottom.sb-always{padding-top:68px!important;padding-bottom:0!important}
+ body.sb-bottom.sb-always{padding-top:0!important;padding-bottom:68px!important}
+ body.sb-top #sidebar,body.sb-bottom #sidebar{justify-content:flex-start;padding:8px}
+ body.sb-top #sidebar>div:first-child,body.sb-bottom #sidebar>div:first-child{gap:6px}
+ body.sb-top .sidebar-logo,body.sb-bottom .sidebar-logo{display:none}
+ .settings-layout-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+
+/* Tournament view: mirrored, horizontal bracket trees like a classic double-sided bracket. */
+.bracket-setup[hidden]{display:none!important}
+.bracket-layout.double-bracket{display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,.55fr) minmax(0,1fr);gap:12px;align-items:stretch;overflow-x:auto}
+.bracket-side-horizontal{min-width:0;display:flex;gap:4px;align-items:stretch;background:rgba(0,0,0,.07);border:2px solid rgba(255,255,255,.17);border-radius:12px;padding:8px}
+.bracket-side-horizontal.mirror{flex-direction:row-reverse}
+.bracket-side-horizontal>h3{display:none}
+.bracket-h-round{flex:1 1 0;min-width:105px;display:flex;flex-direction:column;justify-content:space-around;gap:8px;position:relative}
+.bracket-h-round:not(:last-child):after{content:"";position:absolute;right:-4px;top:25%;height:50%;border-right:2px solid rgba(255,255,255,.5);pointer-events:none}
+.bracket-side-horizontal.mirror .bracket-h-round:not(:last-child):after{right:auto;left:-4px}
+.bracket-h-round .bracket-round-title{font-size:10px;margin:4px 0}
+.bracket-h-round .bracket-dynamic-match{padding:6px;margin:4px 0;position:relative}
+.bracket-h-round .bracket-dynamic-match:after{content:"";position:absolute;top:50%;right:-7px;width:7px;border-top:2px solid rgba(255,255,255,.5)}
+.bracket-side-horizontal.mirror .bracket-h-round .bracket-dynamic-match:after{right:auto;left:-7px}
+.bracket-h-round:last-child .bracket-dynamic-match:after{display:none}
+.bracket-grand-final{align-self:center;width:100%}
+@media(max-width:900px){.bracket-layout.double-bracket{grid-template-columns:minmax(0,1fr);overflow:visible}.bracket-side-horizontal{overflow-x:auto;min-height:250px}.bracket-grand-final{max-width:360px;grid-row:2}.bracket-side-horizontal.mirror{grid-row:3}}
+
+
+
+/* Tournament-only fullscreen presentation. The rest of the site stays outside the fullscreen element. */
+#bracketGame:fullscreen{width:100vw;height:100vh;max-width:none;margin:0;border:0;border-radius:0;box-shadow:none;padding:clamp(12px,2vw,28px);box-sizing:border-box;overflow:auto;background:var(--accent);}
+#bracketGame:fullscreen .bracket-layout-viewport{height:calc(100vh - 270px);min-height:420px;overflow:auto;}
+#bracketGame:fullscreen .bracket-layout.double-bracket{min-height:100%;}
+#bracketGame:fullscreen .bracket-layout.four-player-layout{min-height:100%;}
+.four-player-layout{display:grid!important;grid-template-columns:minmax(280px,1fr) minmax(280px,1fr);gap:clamp(28px,6vw,100px);align-items:stretch;width:100%;min-width:0;min-height:500px;margin:8px 0 0;}
+.four-player-column{display:flex;flex-direction:column;min-width:0;background:rgba(0,0,0,.07);border:2px solid rgba(255,255,255,.18);border-radius:14px;padding:18px;}
+.four-player-column h3{font:normal 22px 'Titan One',sans-serif;text-align:center;margin:4px 0 18px;}
+.four-player-column .bracket-dynamic-match{margin:14px 0;padding:14px;}
+.four-player-semifinals{justify-content:space-between;gap:24px;}
+.four-player-final{justify-content:center;}
+.four-player-final .bracket-dynamic-match{max-width:520px;width:100%;align-self:center;padding:20px;}
+.four-player-final .match-row{padding:14px 10px!important;min-height:48px;}
+@media(max-width:760px){.four-player-layout{grid-template-columns:1fr;gap:18px}.four-player-semifinals{gap:12px}.four-player-final .bracket-dynamic-match{max-width:none}}
+
+/* Roomier tournament bracket: preserve readable match cards and allow horizontal scrolling instead of compressing. */
+.bracket-layout-viewport{width:100%;max-width:100%;overflow-x:auto;overflow-y:hidden;padding:8px 4px 18px;box-sizing:border-box;scrollbar-gutter:stable;}
+.bracket-layout-viewport{width:100%;max-width:100%;min-height:560px;overflow-x:auto;overflow-y:visible;padding:16px 10px 24px;box-sizing:border-box;background:rgba(0,0,0,.08);border:2px solid rgba(255,255,255,.16);border-radius:16px;}
+.bracket-layout.double-bracket{width:max-content;min-width:1540px;min-height:560px;grid-template-columns:minmax(540px,1fr) 260px minmax(540px,1fr);gap:32px;overflow:visible;align-items:stretch;margin:8px 0 0;box-sizing:border-box;}
+.bracket-side-horizontal{min-width:540px;min-height:520px;gap:18px;padding:20px;align-items:stretch;}
+.bracket-h-round{min-width:165px;gap:20px;padding:0 4px;}
+.bracket-h-round .bracket-round-title{font-size:12px;letter-spacing:.5px;margin:8px 0 12px;min-height:30px;}
+.bracket-h-round .bracket-dynamic-match{padding:9px;margin:14px 0;border-radius:12px;min-width:0;}
+.bracket-h-round .bracket-dynamic-match>div:first-child{font-size:12px!important;line-height:1.35;margin-bottom:8px;}
+.bracket-h-round .bracket-dynamic-match .match-row{display:flex;align-items:center;gap:8px;padding:10px 8px;margin:7px 0;min-height:42px;line-height:1.3;font-size:14px;}
+.bracket-h-round .bracket-dynamic-match .match-row span:first-child{flex:1 1 auto;overflow-wrap:anywhere;word-break:normal;}
+.bracket-h-round .bracket-dynamic-match .match-row .match-score{flex:0 0 auto;min-width:18px;text-align:center;}
+.bracket-h-round .bracket-dynamic-match .match-row .btn{padding:5px 9px;min-width:32px;min-height:32px;}
+.bracket-h-round .bracket-dynamic-match .match-result{font-size:12px;line-height:1.4;padding-top:4px;}
+.bracket-grand-final{width:230px;max-width:none;padding:16px;box-sizing:border-box;}
+.bracket-grand-final h3{font-size:22px;line-height:1.3;margin-bottom:16px;}
+.bracket-grand-final .bracket-dynamic-match{padding:12px;margin:0;}
+.bracket-grand-final .match-row{display:flex;align-items:center;gap:8px;padding:10px 8px;margin:8px 0;min-height:42px;line-height:1.3;overflow-wrap:anywhere;}
+.bracket-grand-final .match-row span:first-child{flex:1 1 auto;min-width:0;overflow-wrap:anywhere;}
+@media(max-width:900px){.bracket-layout.double-bracket{width:max-content;min-width:1540px;grid-template-columns:minmax(540px,1fr) 260px minmax(540px,1fr);overflow:visible}.bracket-side-horizontal{min-width:540px;overflow:visible;min-height:520px}.bracket-grand-final{width:260px;max-width:none;grid-row:auto}.bracket-side-horizontal.mirror{grid-row:auto}}
+
+
+/* Fullscreen tournament: show only the bracket canvas, edge-to-edge. */
+#bracketGame:fullscreen{
+  display:flex; flex-direction:column; gap:0;
+  width:100vw; height:100vh; max-width:none; max-height:none;
+  margin:0!important; padding:0!important; border:0!important;
+  border-radius:0!important; box-shadow:none!important; overflow:hidden;
+}
+#bracketGame:fullscreen .game-toolbar,
+#bracketGame:fullscreen #bracketChampion,
+#bracketGame:fullscreen #bracketDragHint,
+#bracketGame:fullscreen #bracketSetup,
+#bracketGame:fullscreen #bracketWinnerCard{display:none!important;}
+#bracketGame:fullscreen .bracket-layout-viewport{
+  flex:1 1 auto; width:100vw; height:100vh; min-height:0!important;
+  max-width:none; margin:0!important; padding:0!important;
+  border:0!important; border-radius:0!important; box-shadow:none!important;
+  overflow:auto!important; background:transparent; box-sizing:border-box;
+}
+#bracketGame:fullscreen .bracket-layout{margin:0!important; padding:0!important;}
+#bracketGame:fullscreen .bracket-layout.double-bracket{
+  width:max-content; min-width:100%; min-height:100%; height:100%;
+  grid-template-columns:minmax(420px,1fr) 220px minmax(420px,1fr);
+  gap:16px; align-items:stretch; margin:0!important;
+}
+#bracketGame:fullscreen .bracket-side-horizontal{min-height:100%; padding:12px; box-sizing:border-box;}
+#bracketGame:fullscreen .bracket-grand-final{align-self:center;}
+#bracketGame:fullscreen .bracket-layout.four-player-layout{
+  width:100%; height:100%; min-height:0!important; margin:0!important;
+  padding:12px; box-sizing:border-box; gap:18px;
+}
+#bracketGame:fullscreen .four-player-column{padding:12px;}
+@media(max-width:900px){
+ #bracketGame:fullscreen .bracket-layout.double-bracket{grid-template-columns:minmax(360px,1fr) 190px minmax(360px,1fr);}
+}
+
+
+body.dark-mode{color:#f8fafc!important}body.dark-mode h1,body.dark-mode h2,body.dark-mode h3,body.dark-mode p,body.dark-mode label,body.dark-mode .muted,body.dark-mode .settings-note,body.dark-mode .sidebar-logo,body.dark-mode .sidebar-link,body.dark-mode .sidebar-foot-btn{color:#f8fafc!important;text-shadow:none}body.dark-mode #sidebar{background:var(--accent);color:#f8fafc}body.dark-mode .panel,body.dark-mode .mode-card,body.dark-mode .game-panel,body.dark-mode .reset-modal{color:#f8fafc;border-color:rgba(255,255,255,.12)}body.dark-mode .settings-section,body.dark-mode .setting,body.dark-mode .theme-controls label,body.dark-mode .reset-modal>label{color:#f8fafc;background:rgba(255,255,255,.06)}body.dark-mode .sidebar-link.active{background:#e5e7eb;color:#111827!important}body.dark-mode .sidebar-link:hover{background:rgba(255,255,255,.1)}body.dark-mode .btn,body.dark-mode .menu-btn,body.dark-mode .sidebar-footer .btn{background:#111827!important;color:#fff!important;border-color:#334155!important}body.dark-mode .btn:hover:not(:disabled){background:#1e293b!important}body.dark-mode .danger-btn{background:#b91c1c!important;color:#fff!important;border-color:#991b1b!important}body.dark-mode .sidebar-listIcon{color:inherit!important}body.light-mode{color:#1f2937!important}body.light-mode h1,body.light-mode h2,body.light-mode h3,body.light-mode p,body.light-mode label,body.light-mode .muted,body.light-mode .settings-note,body.light-mode .sidebar-logo,body.light-mode .sidebar-link,body.light-mode .sidebar-foot-btn{color:#1f2937!important;text-shadow:none}body.light-mode #sidebar{background:var(--accent);color:#1f2937;box-shadow:inset -10px 0 rgba(0,0,0,.08)}body.light-mode .sidebar-link.active{background:#1f2937;color:#fff!important}body.light-mode .sidebar-link:hover{background:rgba(0,0,0,.08)}body.light-mode .panel,body.light-mode .mode-card,body.light-mode .game-panel,body.light-mode .reset-modal{color:#1f2937;border-color:rgba(0,0,0,.12)}body.light-mode .btn,body.light-mode .menu-btn,body.light-mode .sidebar-footer .btn{background:#1f2937!important;color:#fff!important;border-color:#111827!important}body.light-mode .btn:hover:not(:disabled){background:#374151!important}body.light-mode .team .btn{background:#1f2937!important;color:#fff!important;border-color:#111827!important}body.light-mode .settings-section,body.light-mode .setting,body.light-mode .theme-controls label,body.light-mode .reset-modal>label{color:#1f2937;background:rgba(0,0,0,.06)}body.light-mode .reset-modal input{accent-color:#1f2937}body.light-mode .danger-btn{background:#b91c1c!important;color:#fff!important;border-color:#991b1b!important}body.light-mode .sidebar-listIcon{color:inherit!important}
+.settings-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.theme-controls{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px}.theme-controls label{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:220px;padding:12px;border-radius:9px;background:rgba(0,0,0,.16);font-weight:900}.theme-controls input[type=color]{width:54px;height:42px;padding:2px;border:2px solid rgba(255,255,255,.55);border-radius:7px;cursor:pointer}.danger-btn{background:#b91c1c!important}.reset-modal-backdrop{position:fixed;inset:0;z-index:5000;background:rgba(0,0,0,.68);display:flex;align-items:center;justify-content:center;padding:18px}.reset-modal-backdrop[hidden]{display:none}.reset-modal{width:min(100%,520px);max-height:90vh;overflow:auto;background:var(--accent);color:#fff;border:3px solid rgba(255,255,255,.5);border-radius:16px;padding:24px;box-shadow:0 18px 60px #0008}.reset-modal h2{margin:0 0 8px}.reset-modal>label{display:flex;gap:10px;align-items:center;padding:10px;margin:7px 0;background:#0002;border-radius:8px;font-weight:800}.reset-modal input{width:18px;height:18px;accent-color:#fff}.reset-modal-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.reset-modal-actions .btn{flex:1}
+
+
+.bracket-match-screen{position:fixed;inset:0;z-index:99999;width:100vw;height:100vh;min-height:100vh;overflow:auto;background:linear-gradient(165deg,var(--bg-top),var(--bg-bottom));width:100%;min-height:65vh;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:22px;padding:clamp(18px,4vw,48px);box-sizing:border-box}.bracket-match-screen h2{font-size:clamp(24px,4vw,42px);margin:0;text-align:center}.bracket-match-scoreboard{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:stretch;gap:clamp(12px,3vw,36px);width:min(1100px,100%)}.bracket-match-player{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:clamp(18px,4vw,44px);border:2px solid rgba(255,255,255,.24);border-radius:20px;min-width:0;text-align:center}.bracket-match-player-name{font-size:clamp(20px,3vw,38px);font-weight:900;overflow-wrap:anywhere}.bracket-match-player-score{font-size:clamp(56px,10vw,120px);line-height:1;font-weight:950;font-variant-numeric:tabular-nums}.bracket-match-player-controls{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}.bracket-match-player-controls .btn{font-size:clamp(20px,2.5vw,30px);min-width:64px;padding:12px 20px}.bracket-match-vs{align-self:center;font-weight:950;font-size:clamp(18px,3vw,32px)}.bracket-match-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}.bracket-match-back{background:#475569!important;color:#fff!important}.bracket-match-note{text-align:center;opacity:.8;margin:0}.bracket-clickable-match{cursor:pointer;transition:transform .12s ease,border-color .12s ease}.bracket-clickable-match:hover{transform:scale(1.015);border-color:var(--accent)}#bracketGame:fullscreen .bracket-match-screen{position:fixed;inset:0;z-index:99999;width:100vw;height:100vh;min-height:100vh;margin:0;padding:clamp(18px,4vw,56px);overflow:auto;background:linear-gradient(165deg,var(--bg-top),var(--bg-bottom));display:flex;flex-direction:column;justify-content:center;align-items:center;}#bracketGame:fullscreen .bracket-match-scoreboard{width:min(1500px,96%)}#bracketGame:fullscreen .bracket-match-player{min-height:55vh}#bracketGame:fullscreen .bracket-match-player-score{font-size:clamp(80px,13vw,180px)}#bracketGame:fullscreen .bracket-match-player-name{font-size:clamp(28px,4vw,58px)}#bracketGame:fullscreen .bracket-match-player-controls .btn{font-size:clamp(28px,3vw,42px);min-width:88px}#bracketGame:fullscreen .bracket-layout:not(.four-player-layout):not(.double-bracket){min-height:calc(100vh - 30px);width:100%;display:flex;align-items:center;justify-content:center}#bracketGame:fullscreen .bracket-layout:not(.four-player-layout):not(.double-bracket) .bracket-side{width:100%;max-width:1600px}#bracketGame:fullscreen .bracket-layout:not(.four-player-layout):not(.double-bracket) .bracket-dynamic-match{padding:clamp(24px,5vh,70px);margin:clamp(18px,4vh,48px) auto;max-width:1300px}#bracketGame:fullscreen .bracket-layout:not(.four-player-layout):not(.double-bracket) .match-row{font-size:clamp(26px,4vw,56px);padding:clamp(20px,4vh,48px);margin:clamp(12px,3vh,28px) 0}#bracketGame:fullscreen .bracket-layout:not(.four-player-layout):not(.double-bracket) .match-score{font-size:clamp(32px,5vw,70px)}@media(max-width:650px){.bracket-match-scoreboard{grid-template-columns:1fr}.bracket-match-vs{text-align:center}.bracket-match-player{padding:18px}}
+
+/* Sidebar title: centered within the solid purple area, excluding the dark shadow strip */
+#sidebar .sidebar-logo{font-size:20px;width:100%;max-width:100%;margin:4px 0 14px;text-align:center;letter-spacing:0;line-height:1.15;white-space:nowrap}
+@media(max-width:650px){#sidebar .sidebar-logo{font-size:17px;width:auto;margin:0 10px 0 0}}
+@media(max-width:390px){#sidebar .sidebar-logo{font-size:15px}}
+
+
+.settings-topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+.settings-topbar h2{margin-bottom:0}
+.settings-save-btn{background:#16a34a!important;color:#fff!important;white-space:nowrap}
+.settings-save-btn:hover{filter:brightness(1.08)}
+@media(max-width:520px){.settings-topbar{align-items:flex-start}.settings-save-btn{width:100%;justify-content:center}}
+</style>
+</head>
+<body class="sb-left sb-always">
+<div class="background" aria-hidden="true"></div>
+<button class="menu-btn" type="button" aria-label="Open navigation menu" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+<div id="sidebar-overlay" onclick="closeSidebar()" aria-hidden="true"></div>
+<nav id="sidebar" aria-label="Main navigation">
+  <div>
+    <div class="sidebar-logo">Score Counter</div>
+    <ul class="sidebar-list">
+      <li><button class="sidebar-link active" data-view="home" onclick="showPage('home')"><span class="sidebar-listIcon"><i class="fas fa-home"></i></span><span class="sidebar-text">Home</span></button></li>
+      <li><button class="sidebar-link" data-view="score" onclick="showPage('score')"><span class="sidebar-listIcon"><i class="fa fa-chess-board"></i></span><span class="sidebar-text">Score</span></button></li>
+      <li><button class="sidebar-link" data-view="games" onclick="showPage('games')"><span class="sidebar-listIcon"><i class="fas fa-gamepad"></i></span><span class="sidebar-text">Games</span></button></li>
+    </ul>
+  </div>
+  <div class="sidebar-footer">
+    <button class="sidebar-link" data-view="statistics" onclick="showPage('statistics')" aria-label="Statistics">
+      <span class="sidebar-listIcon"><i class="fas fa-chart-bar"></i></span><span class="sidebar-text">Statistics</span>
+    </button>
+    <button class="sidebar-link" data-view="settings" onclick="showPage('settings')" aria-label="Settings">
+      <span class="sidebar-listIcon"><i class="fas fa-cog"></i></span><span class="sidebar-text">Settings</span>
+    </button>
+  </div>
+</nav>
+<main>
+  <section class="page active" id="home">
+    <h1>Score Counter</h1>
+    <div class="panel">
+      <h2>Keep track of the game!</h2>
+      <p>Score Counter is a simple way to keep score when you're playing games with friends, in class, or at home. Choose a color for each team, tap <strong>Add a Point</strong> whenever they score, and the counter will keep track for you.</p>
+      <p>Customize player names and colors in Settings, then set the number of points needed to win before the game begins.</p>
+      <p>When a team reaches the winning score, the game announces the winner. Use <strong>Reset</strong> to start a new round.</p>
+    </div>
+  </section>
+  <section class="page" id="score">
+    <h1>Score Counter</h1>
+    <p class="score-intro" id="scoreIntro">First team to 3 points wins!</p>
+    <div class="settings">
+      <label class="setting">Team 1
+        <select id="color1" aria-label="Team 1" onchange="updateColors()"><option value="red">Player 1</option><option value="green">Player 2</option><option value="blue">Player 3</option><option value="orange" selected>Player 4</option></select>
+      </label>
+      <label class="setting">Team 2
+        <select id="color2" aria-label="Team 2" onchange="updateColors()"><option value="red">Player 1</option><option value="green">Player 2</option><option value="blue">Player 3</option><option value="orange" selected>Player 4</option></select>
+      </label>
+      <label class="setting" for="targetScore">Points to win
+        <input id="targetScore" type="number" min="1" max="99" value="3" aria-label="Points needed to win" onchange="updateTarget()" oninput="updateTarget()">
+      </label>
+    </div>
+    <div class="scoreboard">
+      <article class="team" id="team1"><h2 id="name1">Player 4</h2><div class="score" id="score1" aria-live="polite">0</div><div class="team-score-controls"><button class="btn score-minus" id="sub1" onclick="subtractPoint(1)" aria-label="Remove a point from Player 4">−</button><button class="btn" id="add1" onclick="addPoint(1)">＋ Add a Point</button></div></article>
+      <article class="team" id="team2"><h2 id="name2">Player 1</h2><div class="score" id="score2" aria-live="polite">0</div><div class="team-score-controls"><button class="btn score-minus" id="sub2" onclick="subtractPoint(2)" aria-label="Remove a point from Player 1">−</button><button class="btn" id="add2" onclick="addPoint(2)">＋ Add a Point</button></div></article>
+    </div>
+    <div id="status" role="status" aria-live="polite">Ready to play?</div>
+    <div class="score-actions"><button class="btn" onclick="resetScores()">↻ Reset</button></div>
+  </section>
+
+  <section class="page" id="games">
+    <h1>Games</h1>
+    <p class="score-intro">Choose a game mode and start a competition.</p>
+    <div id="gameModePicker" class="game-mode-grid">
+      <article class="mode-card">
+        <h2><i class="fas fa-trophy"></i> Bracket</h2>
+        <p>Choose a 2, 4, 8, 16, or 32-player knockout bracket. Larger brackets split into left and right sides that meet in the championship final.</p>
+        <button class="btn" id="bracketModeButton" onclick="startBracket()">Start Bracket</button>
+      </article>
+      <article class="mode-card">
+        <h2><i class="fas fa-crown"></i> King &amp; Queen</h2>
+        <p>The crown holder stays on after a win. Challengers rotate so every player gets a turn. Player 1, Player 2, and Player 4 are Kings; Player 3 is the Queen.</p>
+        <button class="btn" id="kingQueenModeButton" onclick="startKingQueen()">Start King &amp; Queen</button>
+      </article>
+    </div>
+  </section>
+
+  <section class="page" id="bracket">
+    <h1>Bracket</h1>
+    <div id="bracketGame" class="game-panel">
+      <div class="game-toolbar">
+        <label class="setting" for="bracketSize">Bracket size
+          <select id="bracketSize" onchange="changeBracketSize()"><option value="2">2 players</option><option value="4" selected>4 players</option><option value="8">8 players</option><option value="16">16 players</option></select>
+        </label>
+        <label class="setting" for="bracketTarget">Points to win
+          <input id="bracketTarget" type="number" min="1" max="99" value="3">
+        </label>
+        <button class="btn" id="beginBracketButton" onclick="beginBracket()">Begin Tournament</button>
+        <button class="btn" onclick="resetBracket()">Reset Bracket</button>
+        <button class="btn" onclick="showPage('games')">Back to Games</button>
+      </div>
+      <div class="champion-banner" id="bracketChampion">Bracket Tournament</div>
+      <p class="drag-hint" id="bracketDragHint">Before the tournament begins, drag players between bracket slots and the overflow area to arrange matchups.</p>
+      <div id="bracketSetup" class="bracket-setup"></div>
+      <div class="bracket-layout-viewport"><div class="bracket-layout" id="bracketLayout"></div></div>
+      <div class="bracket-champion" id="bracketWinnerCard" style="margin-top:18px">
+        <i class="fas fa-trophy"></i><strong id="bracketWinnerName">TBD</strong><span>Champion</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="page" id="kingqueen">
+    <h1>King &amp; Queen</h1>
+    <div id="kingQueenGame" class="game-panel">
+      <div class="game-toolbar">
+        <label class="setting" for="kingTarget">Points to win
+          <input id="kingTarget" type="number" min="1" max="99" value="3">
+        </label>
+        <button class="btn" onclick="resetKingQueen()">Reset Game</button>
+        <button class="btn" onclick="showPage('games')">Back to Games</button>
+      </div>
+      <div class="king-status" aria-live="polite">
+        <div class="role-title" id="crownRole">Current King</div>
+        <div class="role-name" id="crownName">Player 1</div>
+        <div id="crownSubtext">The crown holder stays on after a win.</div>
+      </div>
+      <div class="player-badges" id="kingPlayerBadges"></div>
+      <div class="king-scoreboard">
+        <article class="king-side" id="kingChampionCard">
+          <h3 id="kingChampionName">King Player 1</h3>
+          <div class="score" id="kingChampionScore">0</div>
+          <div class="team-score-controls"><button class="btn score-minus" id="kingChampionSub" onclick="subtractKingPoint('champion')" aria-label="Remove a point from crown holder">−</button><button class="btn" id="kingChampionAdd" onclick="addKingPoint('champion')">＋ Add a Point</button></div>
+        </article>
+        <article class="king-side" id="kingChallengerCard">
+          <h3 id="kingChallengerName">Challenger Player 2</h3>
+          <div class="score" id="kingChallengerScore">0</div>
+          <div class="team-score-controls"><button class="btn score-minus" id="kingChallengerSub" onclick="subtractKingPoint('challenger')" aria-label="Remove a point from challenger">−</button><button class="btn" id="kingChallengerAdd" onclick="addKingPoint('challenger')">＋ Add a Point</button></div>
+        </article>
+      </div>
+      <div id="kingStatus" role="status" aria-live="polite" class="champion-banner" style="margin-top:18px">Ready to play?</div>
+    </div>
+  </section>
+
+  <section class="page" id="statistics">
+    <h1>Statistics</h1>
+    <p class="score-intro">Wins, losses, and head-to-head records from games played on this page.</p>
+    <div class="game-panel">
+      <div class="stats-summary">
+        <div class="stat-tile"><strong id="statMatches">0</strong><span>Matches</span></div>
+        <div class="stat-tile"><strong id="statWins">0</strong><span>Player Wins</span></div>
+        <div class="stat-tile"><strong id="statLosses">0</strong><span>Player Losses</span></div>
+        <div class="stat-tile"><strong id="statGames">0</strong><span>Game Modes Used</span></div>
+      </div>
+      <div class="game-toolbar" style="justify-content:space-between">
+        <h2 style="margin:0">Player records</h2>
+        <button class="btn" onclick="clearStatistics()">Clear Statistics</button>
+      </div>
+      <div id="statsPlayers"></div>
+      <h2 style="margin-top:24px">Easiest &amp; hardest opponents</h2>
+      <p class="muted">“Easiest opponent” is the player they have beaten most often. “Hardest opponent” is the player they have beaten least often. Ties are shown together.</p>
+      <div id="statsOpponents"></div>
+    </div>
+  </section>
+  <section class="page" id="settings">
+    <h1>Settings</h1>
+    <p class="score-intro">Choose where the sidebar appears and whether it stays visible.</p>
+    <div class="game-panel settings-panel">
+      <div class="settings-topbar"><h2 style="margin-top:0">Sidebar position</h2><button class="btn settings-save-btn" type="button" onclick="saveAllSettings()"><i class="fas fa-save"></i> Save Settings</button></div>
+      <p class="muted">Choose Left, Right, Top, or Bottom.</p>
+      <div class="settings-layout-grid" id="sidebar-layout-grid">
+        <button class="settings-layout-option" type="button" data-position="left" onclick="setSidebarPos('left')"><i class="fas fa-arrow-left"></i>Left</button>
+        <button class="settings-layout-option" type="button" data-position="right" onclick="setSidebarPos('right')"><i class="fas fa-arrow-right"></i>Right</button>
+        <button class="settings-layout-option" type="button" data-position="top" onclick="setSidebarPos('top')"><i class="fas fa-arrow-up"></i>Top</button>
+        <button class="settings-layout-option" type="button" data-position="bottom" onclick="setSidebarPos('bottom')"><i class="fas fa-arrow-down"></i>Bottom</button>
+      </div>
+      <label class="settings-toggle-row">
+        <input type="checkbox" id="sidebar-always" onchange="setSidebarAlways(this.checked)">
+        <span>Always show sidebar (no hamburger button)</span>
+      </label>
+      <div class="settings-section">
+        <h2>Players</h2>
+        <p class="muted">Edit player names and colors, add new players, or remove players. Changes are saved automatically on this device and remain after reloading the page.</p>
+        <div id="players-editor" class="players-editor"></div>
+        <button class="btn" type="button" style="margin-top:14px" onclick="addPlayer()"><i class="fas fa-plus"></i> Add Player</button>
+        <p class="settings-note">Keep at least two players for the game modes to work. Changing the player list resets any active, unfinished games but keeps recorded statistics.</p>
+      </div>
+      <div class="settings-section">
+        <h2>Import &amp; export</h2>
+        <p class="muted">Export a backup of all changeable settings, players, colors, sidebar layout, and statistics. Import a full backup or a player list.</p>
+        <div class="settings-actions"><button class="btn" type="button" onclick="exportSettings()"><i class="fas fa-file-export"></i> Export settings</button><button class="btn" type="button" onclick="document.getElementById('settings-import-file').click()"><i class="fas fa-file-import"></i> Import players / settings</button><input id="settings-import-file" type="file" accept="application/json,.json" hidden onchange="importSettingsFile(this)"></div>
+      </div>
+      <div class="settings-section">
+        <h2>Theme</h2><p class="muted">Choose Original, Light, or Dark mode, then customize the page background, card/accent color, and text color.</p>
+        <div class="theme-controls"><label>Mode <select id="theme-mode" onchange="setThemeMode(this.value)"><option value="original">Original</option><option value="light">Light mode</option><option value="dark">Dark mode</option></select></label><label>Background color <input id="theme-bg" type="color" value="#0bc2cf" onchange="setThemeColor('bg',this.value)"></label><label>Card / accent color <input id="theme-accent" type="color" value="#9a49aa" onchange="setThemeColor('accent',this.value)"></label><label>Text color <input id="theme-text" type="color" value="#ffffff" onchange="setThemeColor('text',this.value)"></label></div>
+      </div>
+      <div class="settings-section">
+        <h2>Reset settings</h2><p class="muted">Choose exactly what to reset, or clear everything and return the app to its defaults.</p>
+        <button class="btn danger-btn" type="button" onclick="openResetModal()"><i class="fas fa-sliders"></i> Options</button>
+      </div>
+    </div>
+  </section>
+</main>
+<div class="reset-modal-backdrop" id="reset-modal" role="dialog" aria-modal="true" aria-labelledby="reset-modal-title" hidden><div class="reset-modal"><h2 id="reset-modal-title">Options</h2><p>Select the items you want to reset.</p><label><input type="checkbox" id="reset-players"> Player names</label><label><input type="checkbox" id="reset-player-colors"> Player colors</label><label><input type="checkbox" id="reset-stats"> Player statistics</label><label><input type="checkbox" id="reset-colors" checked> Theme colors (background, card/accent, and text)</label><label><input type="checkbox" id="reset-sidebar"> Sidebar settings</label><div class="reset-modal-actions"><button class="btn" type="button" onclick="closeResetModal()">Cancel</button><button class="btn danger-btn" type="button" onclick="applySelectedReset()">Reset selected</button><button class="btn danger-btn" type="button" onclick="clearAllSettings()">Clear all</button></div></div></div>
+<script>
+const SIDEBAR_POS_KEY='scoreCounterSidebarPosition';
+const SIDEBAR_ALWAYS_KEY='scoreCounterSidebarAlways';
+let sidebarPos='left';
+let sidebarAlways=true;
+try {
+ const savedPos=localStorage.getItem(SIDEBAR_POS_KEY);
+ if(['left','right','top','bottom'].includes(savedPos)) sidebarPos=savedPos;
+ const savedAlways=localStorage.getItem(SIDEBAR_ALWAYS_KEY);
+ if(savedAlways!==null) sidebarAlways=savedAlways==='1';
+} catch(e) {}
+function applySidebarLayout(){
+ const body=document.body;
+ body.classList.remove('sb-left','sb-right','sb-top','sb-bottom','sb-always');
+ body.classList.add('sb-'+sidebarPos);
+ if(sidebarAlways) body.classList.add('sb-always');
+ const sidebar=document.getElementById('sidebar');
+ const overlay=document.getElementById('sidebar-overlay');
+ const menu=document.querySelector('.menu-btn');
+ if(sidebarAlways){
+  sidebar.classList.add('open');
+  if(overlay) overlay.classList.remove('open');
+  if(menu) menu.style.display='none';
+ }else{
+  sidebar.classList.remove('open');
+  if(overlay) overlay.classList.remove('open');
+  if(menu) menu.style.display='flex';
+ }
+ const checkbox=document.getElementById('sidebar-always');
+ if(checkbox) checkbox.checked=sidebarAlways;
+ document.querySelectorAll('.settings-layout-option').forEach(btn=>btn.classList.toggle('active',btn.dataset.position===sidebarPos));
+ try { localStorage.setItem(SIDEBAR_POS_KEY,sidebarPos); localStorage.setItem(SIDEBAR_ALWAYS_KEY,sidebarAlways?'1':'0'); } catch(e) {}
+}
+function setSidebarPos(pos){
+ if(!['left','right','top','bottom'].includes(pos)) return;
+ sidebarPos=pos; applySidebarLayout();
+}
+function setSidebarAlways(on){ sidebarAlways=!!on; applySidebarLayout(); }
+function toggleSidebar(){
+ if(sidebarAlways) return;
+ const sidebar=document.getElementById('sidebar'),overlay=document.getElementById('sidebar-overlay');
+ const opening=!sidebar.classList.contains('open');
+ sidebar.classList.toggle('open',opening);
+ if(overlay) overlay.classList.toggle('open',opening);
+}
+function closeSidebar(){
+ if(sidebarAlways) return;
+ document.getElementById('sidebar').classList.remove('open');
+ const overlay=document.getElementById('sidebar-overlay');
+ if(overlay) overlay.classList.remove('open');
+}
+
+function saveAllSettings(){
+  try {
+    if(typeof savePlayerData==='function') savePlayerData();
+    if(typeof applySidebarLayout==='function'){
+      localStorage.setItem('scoreCounterSidebarPosition',sidebarPos);
+      localStorage.setItem('scoreCounterSidebarAlways',sidebarAlways?'1':'0');
+    }
+    if(typeof themeSettings!=='undefined') localStorage.setItem('scoreCounterTheme',JSON.stringify(themeSettings));
+    if(typeof stats!=='undefined') localStorage.setItem('scoreCounterStats',JSON.stringify(stats));
+    // Other controls already persist changes immediately; this button explicitly flushes the current settings.
+    const btn=document.querySelector('.settings-save-btn');
+    if(btn){const old=btn.innerHTML;btn.innerHTML='<i class="fas fa-check"></i> Saved!';btn.disabled=true;setTimeout(()=>{btn.innerHTML=old;btn.disabled=false;},1400);}
+  } catch(e) { alert('Settings could not be saved in this browser. Check that site storage is enabled.'); }
+}
+
+const PLAYER_DATA_KEY='scoreCounterPlayerData';
+const defaultPlayerData=[
+ {id:'p_red',name:'Player 1',color:'#ef4444',role:'King'},
+ {id:'p_green',name:'Player 2',color:'#22c55e',role:'King'},
+ {id:'p_blue',name:'Player 3',color:'#3b82f6',role:'Queen'},
+ {id:'p_orange',name:'Player 4',color:'#f59e0b',role:'King'}
+];
+let playerData=loadPlayerData();
+let palette={},players=[],playerColors={};
+function loadPlayerData(){
+ try{const saved=JSON.parse(localStorage.getItem(PLAYER_DATA_KEY)||'null');if(Array.isArray(saved)&&saved.length>=2)return saved.filter(p=>p&&p.id&&p.name&&p.color).map(p=>({id:String(p.id),name:String(p.name),color:String(p.color),role:p.role==='Queen'?'Queen':'King'}));}catch(e){}
+ return defaultPlayerData.map(p=>({...p}));
+}
+function darkenHex(hex){
+ const h=String(hex||'#777777').replace('#','');if(!/^[0-9a-f]{6}$/i.test(h))return '#555555';
+ const n=parseInt(h,16),r=Math.round(((n>>16)&255)*.68),g=Math.round(((n>>8)&255)*.68),b=Math.round((n&255)*.68);
+ return '#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('');
+}
+function savePlayerData(){try{localStorage.setItem(PLAYER_DATA_KEY,JSON.stringify(playerData));}catch(e){}}
+function syncPlayerData(){
+ palette={};players=[];playerColors={};
+ playerData.forEach(p=>{palette[p.id]={main:p.color,dark:darkenHex(p.color),player:p.name,role:p.role||'King'};players.push(p.name);playerColors[p.name]=p.id;});
+ const selects=['color1','color2'];
+ selects.forEach((id,index)=>{const sel=document.getElementById(id),old=sel.value;sel.innerHTML=playerData.map(p=>`<option value="${p.id}">${escapeHTML(p.name)}</option>`).join('');sel.value=playerData.some(p=>p.id===old)?old:(playerData[index]?.id||playerData[0].id);});
+}
+function escapeHTML(value){return String(value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
+function renderPlayerEditor(){
+ const host=document.getElementById('players-editor');if(!host)return;
+ host.innerHTML=playerData.map(p=>`<div class="player-edit-row"><input type="text" aria-label="Player name" maxlength="32" value="${escapeHTML(p.name)}" onchange="renamePlayer('${p.id}',this.value)" onkeydown="if(event.key==='Enter'){this.blur()}"><input type="color" aria-label="Player color" value="${p.color}" onchange="changePlayerColor('${p.id}',this.value)"><button class="btn" type="button" onclick="deletePlayer('${p.id}')" ${playerData.length<=2?'disabled title="At least two players are required"':''}><i class="fas fa-trash"></i> Delete</button></div>`).join('');
+}
+function renamePlayer(id,newName){
+ newName=String(newName||'').trim().slice(0,32);if(!newName){renderPlayerEditor();return;}
+ if(playerData.some(p=>p.id!==id&&p.name.toLowerCase()===newName.toLowerCase())){alert('Each player must have a unique name.');renderPlayerEditor();return;}
+ const p=playerData.find(p=>p.id===id);if(!p||p.name===newName)return;
+ const old=p.name;p.name=newName;
+ if(stats&&stats.players&&stats.players[old]){stats.players[newName]=stats.players[old];delete stats.players[old];Object.values(stats.players).forEach(st=>{if(st.against&&st.against[old]){st.against[newName]=st.against[old];delete st.against[old];}});(stats.results||[]).forEach(r=>{if(r.winner===old)r.winner=newName;if(r.loser===old)r.loser=newName;});saveStats();}
+ syncPlayerData();savePlayerData();renderPlayerEditor();resetPlayerGames();updateColors();renderStatistics();
+}
+function changePlayerColor(id,color){const p=playerData.find(p=>p.id===id);if(!p)return;p.color=color;syncPlayerData();savePlayerData();renderPlayerEditor();updateColors();if(kingQueen)renderKingQueen();if(bracket)renderBracket();}
+function addPlayer(){
+ const n=playerData.length+1;let name='Player '+n;while(playerData.some(p=>p.name.toLowerCase()===name.toLowerCase()))name='Player '+(++nameCounter);
+ playerData.push({id:'p_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7),name,color:'#'+Math.floor(Math.random()*16777215).toString(16).padStart(6,'0'),role:'King'});
+ syncPlayerData();savePlayerData();renderPlayerEditor();resetPlayerGames();updateColors();renderStatistics();
+}
+let nameCounter=1;
+function deletePlayer(id){
+ if(playerData.length<=2){alert('At least two players are required.');return;}
+ const p=playerData.find(p=>p.id===id);if(!p)return;
+ if(!confirm('Delete '+p.name+'? Their recorded statistics will be kept in the saved history but removed from the current player list.'))return;
+ playerData=playerData.filter(x=>x.id!==id);syncPlayerData();savePlayerData();renderPlayerEditor();resetPlayerGames();ensureStats();updateColors();renderStatistics();
+}
+function resetPlayerGames(){
+ scores=[0,0];winner=0;renderScores();document.getElementById('status').textContent='Ready to play?';
+ document.getElementById('add1').disabled=false;document.getElementById('add2').disabled=false;document.getElementById('targetScore').disabled=false;document.getElementById('color1').disabled=false;document.getElementById('color2').disabled=false;
+ bracket=null;kingQueen=null;document.getElementById('bracketModeButton').textContent='Bracket';document.getElementById('kingQueenModeButton').textContent='King & Queen';
+}
+let target=3,scores=[0,0],winner=0;
+let bracket=null, kingQueen=null, bracketDragSource=null;
+let stats=loadStats();
+
+function loadStats(){
+ try{
+  const saved=JSON.parse(localStorage.getItem('scoreCounterStats')||'null');
+  if(saved && saved.players && saved.results) return saved;
+ }catch(e){}
+ const data={players:{},results:[],modes:{bracket:0,kingQueen:0,score:0}};
+ players.forEach(p=>data.players[p]={wins:0,losses:0,played:0,against:{}});
+ return data;
+}
+function saveStats(){
+ try{localStorage.setItem('scoreCounterStats',JSON.stringify(stats));}catch(e){}
+}
+function ensureStats(){
+ players.forEach(p=>{
+  if(!stats.players[p])stats.players[p]={wins:0,losses:0,played:0,against:{}};
+  if(!stats.players[p].against)stats.players[p].against={};
+  players.filter(o=>o!==p).forEach(o=>{if(!stats.players[p].against[o])stats.players[p].against[o]={wins:0,losses:0};});
+ });
+ if(!stats.results)stats.results=[];
+ if(!stats.modes)stats.modes={bracket:0,kingQueen:0,score:0};
+}
+function recordMatch(winnerName,loserName,mode){
+ if(!winnerName||!loserName||winnerName===loserName)return;
+ ensureStats();
+ stats.players[winnerName].wins++;stats.players[winnerName].played++;
+ stats.players[loserName].losses++;stats.players[loserName].played++;
+ stats.players[winnerName].against[loserName].wins++;
+ stats.players[loserName].against[winnerName].losses++;
+ stats.results.push({winner:winnerName,loser:loserName,mode:mode,date:new Date().toISOString()});
+ saveStats();renderStatistics();
+}
+function undoRecordedResultForMode(winnerName,loserName,mode){
+ const ix=(stats.results||[]).map((r,i)=>({r,i})).filter(x=>x.r.mode===mode&&x.r.winner===winnerName&&x.r.loser===loserName).pop()?.i;
+ if(ix===undefined)return;
+ stats.results.splice(ix,1);
+ if(stats.players[winnerName]){stats.players[winnerName].wins=Math.max(0,stats.players[winnerName].wins-1);stats.players[winnerName].played=Math.max(0,stats.players[winnerName].played-1);if(stats.players[winnerName].against&&stats.players[winnerName].against[loserName])stats.players[winnerName].against[loserName].wins=Math.max(0,stats.players[winnerName].against[loserName].wins-1);}
+ if(stats.players[loserName]){stats.players[loserName].losses=Math.max(0,stats.players[loserName].losses-1);stats.players[loserName].played=Math.max(0,stats.players[loserName].played-1);if(stats.players[loserName].against&&stats.players[loserName].against[winnerName])stats.players[loserName].against[winnerName].losses=Math.max(0,stats.players[loserName].against[winnerName].losses-1);}
+ saveStats();renderStatistics();
+}
+function showPage(page){
+ if(page!=='bracket' && document.fullscreenElement===document.getElementById('bracketGame') && document.exitFullscreen) document.exitFullscreen().catch(()=>{});
+ document.querySelectorAll('.page').forEach(el=>el.classList.toggle('active',el.id===page));
+ document.querySelectorAll('.sidebar-link[data-view]').forEach(el=>el.classList.toggle('active',el.dataset.view===page));
+ const titles={home:'Home',score:'Score',games:'Games',bracket:'Bracket',kingqueen:'King & Queen',statistics:'Statistics',settings:'Settings'};
+ document.title='Score Counter | '+(titles[page]||'Home');
+ if(page==='statistics')renderStatistics();
+ if(!sidebarAlways) closeSidebar();
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+function updateColors(){
+ [1,2].forEach(i=>{
+  const key=document.getElementById('color'+i).value,p=palette[key],card=document.getElementById('team'+i);
+  card.style.setProperty('--team',p.main);card.style.setProperty('--team-dark',p.dark);
+  document.getElementById('name'+i).textContent=p.player;
+  document.getElementById('add'+i).setAttribute('aria-label','Add a point for '+p.player);
+ });
+}
+function updateTarget(){
+ const input=document.getElementById('targetScore');
+ let val=parseInt(input.value,10);
+ if(!Number.isFinite(val))return;
+ val=Math.max(1,Math.min(99,val));input.value=val;target=val;
+ if(!scores.some(s=>s>0)&&!winner)document.getElementById('scoreIntro').textContent='First player to '+target+' '+(target===1?'point':'points')+' wins!';
+}
+function addPoint(team){
+ if(winner)return;
+ if(scores[0]===0&&scores[1]===0){stats.modes.score++;saveStats();renderStatistics();}
+ const input=document.getElementById('targetScore');
+ if(!scores.some(s=>s>0))updateTarget();
+ scores[team-1]=Math.min(target,scores[team-1]+1);renderScores();
+ input.disabled=true;document.getElementById('color1').disabled=true;document.getElementById('color2').disabled=true;
+ if(scores[team-1]>=target){
+  winner=team;
+  const winnerName=palette[document.getElementById('color'+team).value].player;
+  const loserName=palette[document.getElementById('color'+(team===1?2:1)).value].player;
+  document.getElementById('status').textContent=winnerName+' Wins! 🎉';
+  document.getElementById('add1').disabled=true;document.getElementById('add2').disabled=true;
+  recordMatch(winnerName,loserName,'score');
+ }else document.getElementById('status').textContent='Keep going!';
+}
+function subtractPoint(team){
+ const idx=team-1;if(scores[idx]<=0)return;
+ if(winner){const winnerName=palette[document.getElementById('color'+winner).value].player;const loserTeam=winner===1?2:1;const loserName=palette[document.getElementById('color'+loserTeam).value].player;undoRecordedResultForMode(winnerName,loserName,'score');winner=0;document.getElementById('status').textContent='Point removed — game is active again.';}
+ scores[idx]=Math.max(0,scores[idx]-1);renderScores();
+ document.getElementById('add1').disabled=false;document.getElementById('add2').disabled=false;document.getElementById('targetScore').disabled=false;document.getElementById('color1').disabled=false;document.getElementById('color2').disabled=false;
+ if(!winner&&scores[idx]<target)document.getElementById('status').textContent='Keep going!';
+}
+function renderScores(){document.getElementById('score1').textContent=scores[0];document.getElementById('score2').textContent=scores[1];}
+function resetScores(){
+ scores=[0,0];winner=0;renderScores();
+ document.getElementById('status').textContent='Ready to play?';
+ document.getElementById('add1').disabled=false;document.getElementById('add2').disabled=false;
+ document.getElementById('targetScore').disabled=false;document.getElementById('color1').disabled=false;document.getElementById('color2').disabled=false;
+ updateTarget();
+}
+function playerColor(name){return palette[playerColors[name]];}
+function roleName(name){return playerColor(name).role+' '+name;}
+function setTargetValue(id,fallback=3){
+ const el=document.getElementById(id);let n=parseInt(el.value,10);
+ if(!Number.isFinite(n))n=fallback;n=Math.max(1,Math.min(99,n));el.value=n;return n;
+}
+function startBracket(){
+ if(!bracket||bracket.champion){stats.modes.bracket++;saveStats();renderStatistics();resetBracket(true);}
+ else renderBracket();
+ showPage('bracket');
+}
+function changeBracketSize(){
+ if(bracket&&bracket.started){document.getElementById('bracketSize').value=String(bracket.size);return;}
+ resetBracket(false);
+}
+function nextPowerOfTwo(n){let p=1;while(p<n)p*=2;return p;}
+function makeMatch(a=null,b=null){return {players:[a,b],scores:[0,0],winner:null,done:false};}
+function buildSide(slotIndexes){
+ const padded=nextPowerOfTwo(slotIndexes.length),rounds=[];
+ const leafSlotIndexes=Array(padded).fill(null);
+ const active=slotIndexes.filter(ix=>bracket.slots[ix]),empty=slotIndexes.filter(ix=>!bracket.slots[ix]);
+ const byes=padded-active.length;
+ // Place active players so any byes are separate first-round matchups, then fill remaining leaves with empty editable slots.
+ let cursor=0;
+ for(let i=0;i<byes&&cursor<active.length;i++)leafSlotIndexes[i*2]=active[cursor++];
+ for(let pos=byes*2;cursor<active.length;pos++)leafSlotIndexes[pos]=active[cursor++];
+ let emptyCursor=0;for(let i=0;i<padded;i++)if(leafSlotIndexes[i]===null&&emptyCursor<empty.length)leafSlotIndexes[i]=empty[emptyCursor++];
+ const first=[];
+ for(let i=0;i<padded;i+=2)first.push(makeMatch(leafSlotIndexes[i]!==null?bracket.slots[leafSlotIndexes[i]]||null:null,leafSlotIndexes[i+1]!==null?bracket.slots[leafSlotIndexes[i+1]]||null:null));
+ rounds.push(first);
+ let count=first.length;while(count>1){count=Math.ceil(count/2);rounds.push(Array.from({length:count},()=>makeMatch()));}
+ return {slotIndexes,leafSlotIndexes,rounds};
+}
+function resetBracket(starting=false){
+ const t=setTargetValue('bracketTarget');
+ const size=parseInt(document.getElementById('bracketSize').value,10)||4;
+ const all=players.slice();
+ const entrants=all.slice(0,size),slots=Array(size).fill(null);
+ if(size>4){const half=size/2,leftCount=Math.ceil(entrants.length/2);entrants.slice(0,leftCount).forEach((name,i)=>slots[i]=name);entrants.slice(leftCount).forEach((name,i)=>slots[half+i]=name);}
+ else entrants.forEach((name,i)=>slots[i]=name);
+ bracket={target:t,size,slots,overflow:all.slice(size),started:false,champion:null,mode:size>4?'double':'single',left:null,right:null,rounds:null,final:makeMatch()};
+ if(size>4){const half=size/2;bracket.left=buildSide(Array.from({length:half},(_,i)=>i));bracket.right=buildSide(Array.from({length:half},(_,i)=>i+half));}
+ else bracket.rounds=buildSide(Array.from({length:size},(_,i)=>i)).rounds;
+ document.getElementById('bracketTarget').disabled=false;
+ document.getElementById('bracketSize').disabled=false;
+ document.getElementById('beginBracketButton').disabled=false;
+ document.getElementById('bracketModeButton').textContent=starting?'Bracket':'Start Bracket';
+ renderBracket();
+}
+function bracketCanRearrange(){return !!bracket&&!bracket.started;}
+function bracketDragStart(event,kind,index){
+ if(!bracketCanRearrange()){event.preventDefault();return;}
+ bracketDragSource={kind,index};event.dataTransfer.effectAllowed='move';event.dataTransfer.setData('text/plain',JSON.stringify(bracketDragSource));event.currentTarget.classList.add('dragging');
+}
+function bracketDragOver(event){if(bracketCanRearrange()){event.preventDefault();event.dataTransfer.dropEffect='move';event.currentTarget.classList.add('drop-target');}}
+function bracketDrop(event,kind,index){
+ event.preventDefault();event.stopPropagation();event.currentTarget.classList.remove('drop-target');if(!bracketCanRearrange()||!bracketDragSource)return;
+ const from=bracketDragSource;if(from.kind===kind&&from.index===index){bracketDragSource=null;return;}
+ if(from.kind==='slot'&&kind==='slot'){
+  const a=bracket.slots[from.index],b=bracket.slots[index];bracket.slots[from.index]=b;bracket.slots[index]=a;
+ }else if(from.kind==='overflow'&&kind==='slot'){
+  const incoming=bracket.overflow.splice(from.index,1)[0],displaced=bracket.slots[index];bracket.slots[index]=incoming;if(displaced)bracket.overflow.splice(from.index,0,displaced);
+ }else if(from.kind==='slot'&&kind==='overflow'){
+  const outgoing=bracket.slots[from.index];if(!outgoing){bracketDragSource=null;return;}
+  if(index>=bracket.overflow.length){bracket.overflow.push(outgoing);bracket.slots[from.index]=null;}
+  else {const displaced=bracket.overflow[index];bracket.overflow[index]=outgoing;bracket.slots[from.index]=displaced||null;}
+ }else if(from.kind==='overflow'&&kind==='overflow'){
+  if(index>=bracket.overflow.length){bracketDragSource=null;return;}
+  const a=bracket.overflow[from.index],b=bracket.overflow[index];bracket.overflow[from.index]=b;bracket.overflow[index]=a;
+ }
+ bracketDragSource=null;rebuildBracketTree();renderBracket();
+}
+function bracketDragEnd(){bracketDragSource=null;document.querySelectorAll('.bracket-slot,.overflow-player').forEach(el=>el.classList.remove('dragging','drop-target'));}
+function rebuildBracketTree(){
+ bracket.champion=null;bracket.final=makeMatch();
+ if(bracket.size>4){const half=bracket.size/2;bracket.left=buildSide(Array.from({length:half},(_,i)=>i));bracket.right=buildSide(Array.from({length:half},(_,i)=>i+half));}
+ else bracket.rounds=buildSide(Array.from({length:bracket.size},(_,i)=>i)).rounds;
+}
+function beginBracket(){
+ if(!bracket)return;
+ if(bracket.started)return;
+ bracket.started=true;document.getElementById('bracketTarget').disabled=false;document.getElementById('bracketSize').disabled=true;document.getElementById('beginBracketButton').disabled=true;
+ advanceByes();renderBracket();
+ const tournamentBox=document.getElementById('bracketGame');
+ if(tournamentBox && tournamentBox.requestFullscreen) tournamentBox.requestFullscreen().catch(()=>{});
+}
+function advanceByes(){
+ // Never award a win or move a player forward automatically because an opponent slot is empty.
+ // Every advancement must come from a match that was actually played and won.
+ if(!bracket||!bracket.started)return;
+ const propagateWinners=side=>{
+  for(let r=0;r<side.rounds.length-1;r++){
+   side.rounds[r].forEach((m,i)=>{
+    if(!m.done||!m.winner)return;
+    const next=side.rounds[r+1][Math.floor(i/2)];
+    if(next)next.players[i%2]=m.winner;
+   });
+  }
+ };
+ if(bracket.size>4){propagateWinners(bracket.left);propagateWinners(bracket.right);}
+ else propagateWinners({rounds:bracket.rounds});
+ updateGrandFinalPlayers();
+ if(bracket.size<=4){const final=bracket.rounds.at(-1)[0];if(final.done&&final.players[0]&&final.players[1])bracket.champion=final.winner;}
+}
+function updateGrandFinalPlayers(){
+ if(!bracket||bracket.size<=4)return;
+ const l=bracket.left.rounds.at(-1)[0],r=bracket.right.rounds.at(-1)[0];
+ // The championship final is playable only after BOTH side finals have been played.
+ if(l.done&&l.winner&&r.done&&r.winner){
+  bracket.final.players=[l.winner,r.winner];
+ }else{
+  bracket.final=makeMatch();
+  bracket.final.players=[l.done&&l.winner?l.winner:null,r.done&&r.winner?r.winner:null];
+  bracket.champion=null;
+ }
+}
+function getBracketMatch(round,index,side){
+ if(bracket.size>4)return (side==='left'?bracket.left:bracket.right).rounds[round][index];
+ return bracket.rounds[round][index];
+}
+
+let activeBracketMatch=null;
+function bracketMatchRef(sideName,round,index){return sideName==='grand'?bracket.final:getBracketMatch(round,index,sideName);}
+function openBracketMatch(sideName,round,index){if(!bracket||!bracket.started)return;const m=bracketMatchRef(sideName,round,index);if(!m||m.done||!m.players[0]||!m.players[1])return;activeBracketMatch={sideName,round,index};renderBracketMatchScreen();}
+function renderBracketMatchScreen(){
+ if(!bracket||!activeBracketMatch)return;const game=document.getElementById('bracketGame'),viewport=document.querySelector('#bracketGame .bracket-layout-viewport'),layout=document.getElementById('bracketLayout');if(!game||!viewport||!layout)return;
+ let screen=document.getElementById('bracketMatchScreen');if(!screen){screen=document.createElement('div');screen.id='bracketMatchScreen';screen.className='bracket-match-screen';game.appendChild(screen);}
+ const {sideName,round,index}=activeBracketMatch,m=bracketMatchRef(sideName,round,index);if(!m){closeBracketMatch();return;}
+ const p0=m.players[0],p1=m.players[1],heading=sideName==='grand'||(bracket.size===4&&round===1)?'Championship Final':bracket.size===4?'Semifinal '+(index+1):'Bracket Match';
+ screen.innerHTML=`<h2>${heading}</h2><p class="score-intro bracket-match-note">${m.done?escapeHTML(m.winner)+" wins! You can remove a point to undo the result.":`First player to ${bracket.target} ${bracket.target===1?"point":"points"} wins!`}</p><div class="scoreboard bracket-match-scoreboard"><article class="team bracket-match-player" style="--team:${playerColor(p0).main};--team-dark:${playerColor(p0).dark}"><h2>${escapeHTML(p0)}</h2><div class="score bracket-match-player-score">${m.scores[0]}</div><div class="team-score-controls bracket-match-player-controls"><button class="btn score-minus" onclick="changeActiveBracketScore(0,-1)" aria-label="Remove point from ${escapeHTML(p0)}">−</button><button class="btn" onclick="changeActiveBracketScore(0,1)" aria-label="Add point to ${escapeHTML(p0)}" ${m.done?"disabled":""}>＋ Add a Point</button></div></article><div class="bracket-match-vs">VS</div><article class="team bracket-match-player" style="--team:${playerColor(p1).main};--team-dark:${playerColor(p1).dark}"><h2>${escapeHTML(p1)}</h2><div class="score bracket-match-player-score">${m.scores[1]}</div><div class="team-score-controls bracket-match-player-controls"><button class="btn score-minus" onclick="changeActiveBracketScore(1,-1)" aria-label="Remove point from ${escapeHTML(p1)}">−</button><button class="btn" onclick="changeActiveBracketScore(1,1)" aria-label="Add point to ${escapeHTML(p1)}" ${m.done?"disabled":""}>＋ Add a Point</button></div></article></div><div class="bracket-match-actions">${m.scores[0]===0&&m.scores[1]===0?'<button class="btn bracket-match-back" onclick="closeBracketMatch()">← Back to Bracket</button>':''}${m.done?'<button class="btn bracket-match-back" onclick="closeBracketMatch()">Return to Bracket</button>':''}</div>`;
+ layout.style.display='none';viewport.classList.add('match-open');
+}
+function closeBracketMatch(){activeBracketMatch=null;const screen=document.getElementById('bracketMatchScreen');if(screen)screen.remove();const layout=document.getElementById('bracketLayout');if(layout)layout.style.display='';const viewport=document.querySelector('#bracketGame .bracket-layout-viewport');if(viewport)viewport.classList.remove('match-open');}
+function undoRecordedBracketResult(winner,loser){const ix=(stats.results||[]).map((r,i)=>({r,i})).filter(x=>x.r.mode==='bracket'&&x.r.winner===winner&&x.r.loser===loser).pop()?.i;if(ix===undefined)return;stats.results.splice(ix,1);if(stats.players[winner]){stats.players[winner].wins=Math.max(0,stats.players[winner].wins-1);stats.players[winner].played=Math.max(0,stats.players[winner].played-1);if(stats.players[winner].against&&stats.players[winner].against[loser])stats.players[winner].against[loser].wins=Math.max(0,stats.players[winner].against[loser].wins-1);}if(stats.players[loser]){stats.players[loser].losses=Math.max(0,stats.players[loser].losses-1);stats.players[loser].played=Math.max(0,stats.players[loser].played-1);if(stats.players[loser].against&&stats.players[loser].against[winner])stats.players[loser].against[winner].losses=Math.max(0,stats.players[loser].against[winner].losses-1);}saveStats();renderStatistics();}
+function clearDownstreamBracketMatches(sideName,round,index){
+ if(bracket.size>4){const side=sideName==='left'?bracket.left:bracket.right;for(let r=round+1;r<side.rounds.length;r++){const m=side.rounds[r][Math.floor(index/Math.pow(2,r-round))];if(!m)continue;if(m.done&&m.winner)undoRecordedBracketResult(m.winner,m.players[0]===m.winner?m.players[1]:m.players[0]);m.players=[null,null];m.scores=[0,0];m.winner=null;m.done=false;}if(bracket.final.done&&bracket.final.winner)undoRecordedBracketResult(bracket.final.winner,bracket.final.players[0]===bracket.final.winner?bracket.final.players[1]:bracket.final.players[0]);bracket.final=makeMatch();bracket.champion=null;
+ }else{for(let r=round+1;r<bracket.rounds.length;r++){const m=bracket.rounds[r][Math.floor(index/Math.pow(2,r-round))];if(!m)continue;if(m.done&&m.winner)undoRecordedBracketResult(m.winner,m.players[0]===m.winner?m.players[1]:m.players[0]);m.players=[null,null];m.scores=[0,0];m.winner=null;m.done=false;}bracket.champion=null;}
+}
+function changeActiveBracketScore(playerIndex,delta){
+ if(!activeBracketMatch||!bracket)return;const {sideName,round,index}=activeBracketMatch,m=bracketMatchRef(sideName,round,index);if(!m)return;
+ if(delta>0){if(m.done)return;m.scores[playerIndex]=Math.min(bracket.target,m.scores[playerIndex]+1);document.getElementById('bracketTarget').disabled=true;if(m.scores[playerIndex]>=bracket.target){m.done=true;m.winner=m.players[playerIndex];recordMatch(m.winner,m.players[1-playerIndex],'bracket');if(sideName==='grand')bracket.champion=m.winner;else if(bracket.size>4){const side=sideName==='left'?bracket.left:bracket.right,next=side.rounds[round+1];if(next)next[Math.floor(index/2)].players[index%2]=m.winner;}else{const next=bracket.rounds[round+1];if(next)next[Math.floor(index/2)].players[index%2]=m.winner;else bracket.champion=m.winner;}advanceByes();if(bracket.size>4)updateGrandFinalPlayers();else if(bracket.rounds.at(-1)[0].done)bracket.champion=bracket.rounds.at(-1)[0].winner;renderBracket();renderBracketMatchScreen();return;}}
+ else{if(m.scores[playerIndex]<=0)return;if(m.done){const winner=m.winner,loser=m.players[0]===winner?m.players[1]:m.players[0];clearDownstreamBracketMatches(sideName,round,index);undoRecordedBracketResult(winner,loser);m.done=false;m.winner=null;}m.scores[playerIndex]=Math.max(0,m.scores[playerIndex]-1);if(sideName==='grand')bracket.champion=null;}
+ renderBracketMatchScreen();
+}
+
+function addBracketPoint(sideName,round,index,playerIndex){
+ if(!bracket||!bracket.started)return;
+ const match=sideName==='grand'?bracket.final:getBracketMatch(round,index,sideName);
+ if(!match||match.done||!match.players[playerIndex])return;
+ match.scores[playerIndex]=Math.min(bracket.target,match.scores[playerIndex]+1);
+ document.getElementById('bracketTarget').disabled=true;
+ if(match.scores[playerIndex]>=bracket.target){
+  match.done=true;match.winner=match.players[playerIndex];recordMatch(match.winner,match.players[1-playerIndex],'bracket');
+  if(sideName==='grand')bracket.champion=match.winner;
+  else if(bracket.size>4){
+   const side=sideName==='left'?bracket.left:bracket.right;
+   const next=side.rounds[round+1];if(next)next[Math.floor(index/2)].players[index%2]=match.winner;
+  }else{
+   const next=bracket.rounds[round+1];if(next)next[Math.floor(index/2)].players[index%2]=match.winner;
+   else if(bracket.size===2)bracket.champion=match.winner;
+  }
+  advanceByes();
+  if(bracket.size>4)updateGrandFinalPlayers();
+  else if(bracket.rounds.at(-1)[0].done)bracket.champion=bracket.rounds.at(-1)[0].winner;
+ }
+ renderBracket();
+}
+function playerMatchRow(match,playerIndex,sideName,round,index,slotIndex=null){
+ const name=match.players[playerIndex];
+ if(slotIndex!==null&&!bracket.started){
+  const pc=name?playerColor(name):null;
+  return `<div class="bracket-slot ${name?'':'empty'}" data-drag-kind="slot" data-drag-index="${slotIndex}" ${name?'draggable="true"':''} ondragstart="bracketDragStart(event,'slot',${slotIndex})" ondragover="bracketDragOver(event)" ondrop="bracketDrop(event,'slot',${slotIndex})" ondragend="bracketDragEnd()" style="${pc?`background:${pc.main};`:''}"><span class="slot-number">${slotIndex+1}</span><span>${name?escapeHTML(name):'Empty slot'}${name?' ↕':''}</span></div>`;
+ }
+ if(!name)return `<div class="match-row" style="opacity:.65"><span>Bye / TBD</span><span class="match-score">—</span></div>`;
+ const pc=playerColor(name),sc=match.scores[playerIndex]||0;
+ return `<div class="match-row" style="background:${pc.main}"><span>${escapeHTML(name)}</span><span class="match-score">${sc}</span></div>`;
+}
+function renderTreeSide(side,sideName,title){
+ let html=`<div class="bracket-side"><h3>${title}</h3>`;
+ side.rounds.forEach((round,r)=>{
+  const labels=sideName==='single'?(side.rounds.length===1?['Final']:['Semifinals','Final']):side.rounds.length===1?['Final']:side.rounds.length===2?['Semifinals','Side Final']:side.rounds.length===3?['Quarterfinals','Semifinals','Side Final']:['Round of '+(round.length*2),'Round of '+(round.length),'Side Final'];
+  html+=`<div class="bracket-round"><div class="bracket-round-title">${labels[r]||('Round '+(r+1))}</div>`;
+  round.forEach((m,i)=>{
+   html+=`<div class="bracket-dynamic-match ${bracket.started&&!m.done&&m.players[0]&&m.players[1]?'bracket-clickable-match':''}" ${bracket.started&&!m.done&&m.players[0]&&m.players[1]?`onclick="openBracketMatch('${sideName}',${r},${i})"`:""}><div style="font-weight:900;text-align:center;font-size:12px">${labels[r]==='Final'?'Match 1':labels[r]==='Side Final'?'Side Final':(labels[r]||'Match')+' '+(i+1)}</div>`;
+   if(r===0&&!bracket.started){const ix0=side.leafSlotIndexes?side.leafSlotIndexes[i*2]:side.slotIndexes[i*2],ix1=side.leafSlotIndexes?side.leafSlotIndexes[i*2+1]:side.slotIndexes[i*2+1];if(ix0!==null&&ix0!==undefined)html+=playerMatchRow({players:[bracket.slots[ix0]||null]},0,sideName,r,i,ix0);else html+='<div class="bracket-slot empty">Bye</div>';if(ix1!==null&&ix1!==undefined)html+=playerMatchRow({players:[bracket.slots[ix1]||null]},0,sideName,r,i,ix1);else html+='<div class="bracket-slot empty">Bye</div>';}
+   else {html+=playerMatchRow(m,0,sideName,r,i);html+=playerMatchRow(m,1,sideName,r,i);}
+   html+=m.done?`<div class="match-result">${m.winner?'Winner: '+escapeHTML(m.winner):'Bye'}</div>`:`<div class="match-result">${bracket.started?'First to '+bracket.target+' wins':'Waiting to begin'}</div>`;
+   html+='</div>';
+  });html+='</div>';
+ });html+='</div>';return html;
+}
+function renderHorizontalTreeSide(side,sideName,title){
+ const labels=side.rounds.length===1?['Side Final']:side.rounds.length===2?['Semifinals','Side Final']:side.rounds.length===3?['Quarterfinals','Semifinals','Side Final']:['Round of '+(side.rounds[0].length*2),'Round of '+side.rounds[0].length,'Semifinals','Side Final'];
+ let html=`<div class="bracket-side-horizontal ${sideName==='right'?'mirror':''}"><h3>${title}</h3>`;
+ side.rounds.forEach((round,r)=>{
+  html+=`<div class="bracket-h-round"><div class="bracket-round-title">${labels[r]||('Round '+(r+1))}</div>`;
+  round.forEach((m,i)=>{
+   html+=`<div class="bracket-dynamic-match ${bracket.started&&!m.done&&m.players[0]&&m.players[1]?'bracket-clickable-match':''}" ${bracket.started&&!m.done&&m.players[0]&&m.players[1]?`onclick="openBracketMatch('${sideName}',${r},${i})"`:""}><div style="font-weight:900;text-align:center;font-size:10px">${labels[r]==='Side Final'?'Side Final':(labels[r]||'Match')+' '+(i+1)}</div>`;
+   if(r===0&&!bracket.started){const ix0=side.leafSlotIndexes?side.leafSlotIndexes[i*2]:side.slotIndexes[i*2],ix1=side.leafSlotIndexes?side.leafSlotIndexes[i*2+1]:side.slotIndexes[i*2+1];if(ix0!==null&&ix0!==undefined)html+=playerMatchRow({players:[bracket.slots[ix0]||null]},0,sideName,r,i,ix0);else html+='<div class="bracket-slot empty">Bye</div>';if(ix1!==null&&ix1!==undefined)html+=playerMatchRow({players:[bracket.slots[ix1]||null]},0,sideName,r,i,ix1);else html+='<div class="bracket-slot empty">Bye</div>';}
+   else {html+=playerMatchRow(m,0,sideName,r,i);html+=playerMatchRow(m,1,sideName,r,i);}
+   html+=m.done?`<div class="match-result">${m.winner?'Winner: '+escapeHTML(m.winner):'Bye'}</div>`:`<div class="match-result">${bracket.started?'First to '+bracket.target:'Awaiting start'}</div>`;
+   html+='</div>';
+  });html+='</div>';
+ });html+='</div>';return html;
+}
+function renderFourPlayerBracket(){
+ const semis=bracket.rounds[0]||[],finalMatch=bracket.rounds[1]&&bracket.rounds[1][0]||makeMatch();
+ let left='<div class="four-player-column four-player-semifinals"><h3>Semifinals</h3>';
+ semis.forEach((m,i)=>{
+  left+=`<div class="bracket-dynamic-match ${bracket.started&&!m.done&&m.players[0]&&m.players[1]?'bracket-clickable-match':''}" ${bracket.started&&!m.done&&m.players[0]&&m.players[1]?`onclick="openBracketMatch('single',0,${i})"`:""}><div style="font-weight:900;text-align:center;font-size:13px;margin-bottom:8px">Semifinal ${i+1}</div>`;
+  if(!bracket.started){const ix0=i*2,ix1=i*2+1;left+=playerMatchRow({players:[bracket.slots[ix0]||null]},0,'single',0,i,ix0);left+=playerMatchRow({players:[bracket.slots[ix1]||null]},0,'single',0,i,ix1);}
+  else {left+=playerMatchRow(m,0,'single',0,i);left+=playerMatchRow(m,1,'single',0,i);}
+  left+=m.done?`<div class="match-result">Winner: ${escapeHTML(m.winner||'—')}</div>`:`<div class="match-result">${bracket.started?'First to '+bracket.target+' wins':'Waiting to begin'}</div>`;
+  left+='</div>';
+ });left+='</div>';
+ let right=`<div class="four-player-column four-player-final"><h3>Final</h3><div class="bracket-dynamic-match ${bracket.started&&!finalMatch.done&&finalMatch.players[0]&&finalMatch.players[1]?'bracket-clickable-match':''}" ${bracket.started&&!finalMatch.done&&finalMatch.players[0]&&finalMatch.players[1]?'onclick="openBracketMatch(\'single\',1,0)"':''}><div style="font-weight:900;text-align:center;font-size:13px;margin-bottom:8px">Championship Match</div>`;
+ right+=playerMatchRow(finalMatch,0,'single',1,0)+playerMatchRow(finalMatch,1,'single',1,0);
+ right+=finalMatch.done?`<div class="match-result">Winner: ${escapeHTML(finalMatch.winner||'—')}</div>`:`<div class="match-result">${bracket.started?'Semifinal winners meet here':'Winners of both semifinals meet here'}</div>`;
+ right+='</div></div>';
+ return left+right;
+}
+function renderBracket(){
+ if(!bracket)return;
+ const setup=document.getElementById('bracketSetup');
+ const slotsHtml=bracket.slots.map((name,i)=>{
+  const pc=name?playerColor(name):null;
+  return `<div class="bracket-slot ${name?'':'empty'}" data-drag-kind="slot" data-drag-index="${i}" ${name&&!bracket.started?'draggable="true"':''} ondragstart="bracketDragStart(event,'slot',${i})" ondragover="bracketDragOver(event)" ondrop="bracketDrop(event,'slot',${i})" ondragend="bracketDragEnd()" style="${pc?`background:${pc.main};`:''}"><span class="slot-number">${i+1}</span><span>${name?escapeHTML(name):'Empty slot'}${name&&!bracket.started?' ↕':''}</span></div>`;
+ }).join('');
+ const overflowHtml=bracket.overflow.length?bracket.overflow.map((name,i)=>{const pc=playerColor(name);return `<div class="overflow-player" draggable="${!bracket.started}" ondragstart="bracketDragStart(event,'overflow',${i})" ondragover="bracketDragOver(event)" ondrop="bracketDrop(event,'overflow',${i})" ondragend="bracketDragEnd()" style="background:${pc.main}">${escapeHTML(name)}${!bracket.started?' ↕':''}</div>`;}).join(''):'<p style="font-size:14px;margin:8px 0">No overflow players. Drag a bracket player here to swap them out.</p>';
+ setup.hidden=bracket.started;
+ setup.innerHTML=`<div class="bracket-slots"><h3>Bracket slots (${bracket.size})</h3><div class="bracket-slot-list">${slotsHtml}</div><p class="bracket-locked-note">${bracket.started?'Tournament in progress — player positions are locked.':'Drag players to swap bracket positions.'}</p></div><div class="bracket-overflow" ondragover="bracketDragOver(event)" ondrop="bracketDrop(event,'overflow',bracket.overflow.length)"><h3>Overflow players (${bracket.overflow.length})</h3>${overflowHtml}<p class="bracket-locked-note">Players here are not in this tournament unless swapped into a bracket slot.</p></div>`;
+ document.getElementById('bracketDragHint').style.display=bracketCanRearrange()?'block':'none';
+ const layout=document.getElementById('bracketLayout');
+ if(bracket.size>4){layout.classList.remove('four-player-layout');layout.classList.add('double-bracket');layout.innerHTML=`${renderHorizontalTreeSide(bracket.left,'left','Left Side')}<div class="bracket-grand-final"><h3>Championship Final</h3><div class="bracket-dynamic-match">${playerMatchRow(bracket.final,0,'grand',0,0)}${playerMatchRow(bracket.final,1,'grand',0,0)}<div class="match-result">${bracket.final.done?'Winner: '+escapeHTML(bracket.final.winner||'—'):bracket.started?'First to '+bracket.target+' wins':'Winners of both sides meet here'}</div></div></div>${renderHorizontalTreeSide(bracket.right,'right','Right Side')}`;}
+ else if(bracket.size===4){layout.classList.remove('double-bracket');layout.classList.add('four-player-layout');layout.innerHTML=renderFourPlayerBracket();} else {layout.classList.remove('double-bracket','four-player-layout');layout.innerHTML=renderTreeSide({slotIndexes:Array.from({length:bracket.size},(_,i)=>i),rounds:bracket.rounds},'single','Bracket');}
+ document.getElementById('bracketWinnerName').textContent=bracket.champion||'TBD';
+ document.getElementById('bracketChampion').textContent=bracket.champion?'🏆 Tournament Champion: '+bracket.champion+'!':(bracket.started?'Bracket Tournament · First to '+bracket.target+' points':'Arrange players, then begin the tournament');
+ document.getElementById('bracketWinnerCard').style.display=bracket.champion?'flex':'none';
+ document.getElementById('bracketSize').value=String(bracket.size);
+ document.getElementById('bracketModeButton').textContent=bracket.champion?'Start Bracket':'Bracket';
+}
+function startKingQueen(){
+ if(!kingQueen){stats.modes.kingQueen++;saveStats();renderStatistics();resetKingQueen(true);}
+ else {document.getElementById('kingQueenModeButton').textContent='King & Queen';renderKingQueen();}
+ showPage('kingqueen');
+}
+function resetKingQueen(starting=false){
+ const t=setTargetValue('kingTarget');
+ kingQueen={target:t,champion:players[0],queue:players.slice(1),scores:[0,0],roundDone:false};
+ document.getElementById('kingTarget').disabled=false;
+ document.getElementById('kingQueenModeButton').textContent=starting?'King & Queen':'Start King & Queen';
+ chooseNextChallenger();renderKingQueen();
+}
+function chooseNextChallenger(){
+ if(!kingQueen)return;
+ // Keep a rotating queue so the just-played challenger is not immediately repeated.
+ kingQueen.queue=kingQueen.queue.filter(p=>p!==kingQueen.champion);
+ players.filter(p=>p!==kingQueen.champion&&!kingQueen.queue.includes(p)).forEach(p=>kingQueen.queue.push(p));
+ kingQueen.challenger=kingQueen.queue[0];
+ kingQueen.scores=[0,0];kingQueen.roundDone=false;
+}
+function renderKingQueen(){
+ if(!kingQueen)return;
+ const champion=kingQueen.champion,challenger=kingQueen.challenger;
+ document.getElementById('crownRole').textContent='Current '+playerColor(champion).role;
+ document.getElementById('crownName').textContent=champion;
+ document.getElementById('crownSubtext').textContent=roleName(champion)+' holds the crown. Winners stay on.';
+ document.getElementById('kingPlayerBadges').innerHTML=players.map(p=>'<span class="player-badge">'+roleName(p)+'</span>').join('');
+ document.getElementById('kingChampionName').textContent=roleName(champion);
+ document.getElementById('kingChallengerName').textContent='Challenger: '+challenger;
+ document.getElementById('kingChampionCard').style.background=playerColor(champion).main;
+ document.getElementById('kingChallengerCard').style.background=playerColor(challenger).main;
+ document.getElementById('kingChampionScore').textContent=kingQueen.scores[0];
+ document.getElementById('kingChallengerScore').textContent=kingQueen.scores[1];
+ document.getElementById('kingChampionAdd').disabled=kingQueen.roundDone;
+ document.getElementById('kingChallengerAdd').disabled=kingQueen.roundDone;
+ document.getElementById('kingChampionSub').disabled=kingQueen.scores[0]<=0;
+ document.getElementById('kingChallengerSub').disabled=kingQueen.scores[1]<=0;
+ if(kingQueen.roundDone){
+  document.getElementById('kingStatus').textContent=kingQueen.roundWinner===champion?champion+' keeps the crown!':kingQueen.roundWinner+' takes the crown!';
+ }else document.getElementById('kingStatus').textContent='First to '+kingQueen.target+' points wins this round.';
+}
+function addKingPoint(side){
+ if(!kingQueen||kingQueen.roundDone)return;
+ const idx=side==='champion'?0:1;
+ kingQueen.scores[idx]=Math.min(kingQueen.target,kingQueen.scores[idx]+1);
+ document.getElementById('kingTarget').disabled=true;
+ if(kingQueen.scores[idx]>=kingQueen.target){
+  const winnerName=idx===0?kingQueen.champion:kingQueen.challenger;
+  const loserName=idx===0?kingQueen.challenger:kingQueen.champion;
+  kingQueen.roundDone=true;kingQueen.roundWinner=winnerName;kingQueen.roundLoser=loserName;kingQueen.previousChampion=kingQueen.champion;
+  document.getElementById('kingQueenModeButton').textContent='Start King & Queen';
+  recordMatch(winnerName,loserName,'kingQueen');
+  // Move the player who just challenged to the back of the queue, never straight back into the next round.
+  kingQueen.queue=kingQueen.queue.filter(p=>p!==loserName&&p!==winnerName);
+  if(loserName!==winnerName)kingQueen.queue.push(loserName);
+  if(idx===1)kingQueen.champion=winnerName;
+  document.getElementById('kingTarget').disabled=true;
+  renderKingQueen();
+  const nextBtn=document.getElementById('kingStatus');
+  nextBtn.innerHTML=(idx===0?'🏆 '+winnerName+' keeps the crown!':'🏆 '+winnerName+' takes the crown!')+
+   '<br><button class="btn" style="margin-top:12px" onclick="nextKingRound()">Next Challenger</button>';
+ }else renderKingQueen();
+}
+function subtractKingPoint(side){
+ if(!kingQueen)return;const idx=side==='champion'?0:1;if(kingQueen.scores[idx]<=0)return;
+ if(kingQueen.roundDone){const winnerName=kingQueen.roundWinner,loserName=kingQueen.roundLoser;undoRecordedResultForMode(winnerName,loserName,'kingQueen');if(kingQueen.previousChampion)kingQueen.champion=kingQueen.previousChampion;kingQueen.roundDone=false;kingQueen.roundWinner=null;kingQueen.roundLoser=null;document.getElementById('kingQueenModeButton').textContent='King & Queen';}
+ kingQueen.scores[idx]=Math.max(0,kingQueen.scores[idx]-1);renderKingQueen();
+}
+function nextKingRound(){
+ if(!kingQueen||!kingQueen.roundDone)return;
+ kingQueen.target=setTargetValue('kingTarget',kingQueen.target);
+ chooseNextChallenger(false);
+ renderKingQueen();
+}
+function renderStatistics(){
+ ensureStats();
+ const total=stats.results.length;
+ document.getElementById('statMatches').textContent=total;
+ document.getElementById('statWins').textContent=players.reduce((n,p)=>n+stats.players[p].wins,0);
+ document.getElementById('statLosses').textContent=players.reduce((n,p)=>n+stats.players[p].losses,0);
+ document.getElementById('statGames').textContent=Object.values(stats.modes).filter(n=>n>0).length;
+ const rows=players.map(p=>{
+  const s=stats.players[p];
+  return '<tr><td><strong>'+p+'</strong></td><td>'+s.played+'</td><td>'+s.wins+'</td><td>'+s.losses+'</td><td>'+(s.played?Math.round(s.wins/s.played*100)+'%':'—')+'</td></tr>';
+ }).join('');
+ document.getElementById('statsPlayers').innerHTML='<table class="stats-table"><thead><tr><th>Player</th><th>Played</th><th>Wins</th><th>Losses</th><th>Win rate</th></tr></thead><tbody>'+rows+'</tbody></table>';
+ const opponentRows=players.map(p=>{
+  const s=stats.players[p],against=players.filter(o=>o!==p).map(o=>({name:o,wins:(s.against[o]||{}).wins||0,losses:(s.against[o]||{}).losses||0}));
+  const played=against.filter(o=>o.wins+o.losses>0);
+  let easiest='Not enough matches',hardest='Not enough matches';
+  if(played.length){
+   const max=Math.max(...played.map(o=>o.wins)),min=Math.min(...played.map(o=>o.wins));
+   easiest=played.filter(o=>o.wins===max).map(o=>o.name+' ('+o.wins+' wins)').join(', ');
+   hardest=played.filter(o=>o.wins===min).map(o=>o.name+' ('+o.wins+' wins)').join(', ');
+  }
+  return '<tr><td><strong>'+p+'</strong></td><td>'+easiest+'</td><td>'+hardest+'</td></tr>';
+ }).join('');
+ document.getElementById('statsOpponents').innerHTML='<table class="stats-table"><thead><tr><th>Player</th><th>Easiest opponent</th><th>Hardest opponent</th></tr></thead><tbody>'+opponentRows+'</tbody></table>';
+}
+function clearStatistics(){
+ if(!confirm('Clear all recorded player statistics? This cannot be undone.'))return;
+ stats={players:{},results:[],modes:{bracket:0,kingQueen:0,score:0}};ensureStats();saveStats();renderStatistics();
+}
+const THEME_KEY='scoreCounterTheme';
+const DEFAULT_THEME={mode:'original',bgTop:'#0bc2cf',bgBottom:'#349aef',accent:'#9a49aa',text:'#ffffff'};
+const LIGHT_THEME={mode:'light',bgTop:'#b8f4f7',bgBottom:'#c5e3ff',accent:'#e8c8ef',text:'#1f2937'};
+const DARK_THEME={mode:'dark',bgTop:'#073b57',bgBottom:'#102f55',accent:'#482052',text:'#f8fafc'};
+let themeSettings={...DEFAULT_THEME};
+function normalizeHex(v,fallback){return /^#[0-9a-f]{6}$/i.test(String(v||''))?String(v):fallback;}
+function applyTheme(){
+ themeSettings.mode=['original','light','dark'].includes(themeSettings.mode)?themeSettings.mode:'original';
+ document.body.classList.toggle('light-mode',themeSettings.mode==='light');
+ document.body.classList.toggle('dark-mode',themeSettings.mode==='dark');
+ const modeSelect=document.getElementById('theme-mode');if(modeSelect)modeSelect.value=themeSettings.mode;
+ const root=document.documentElement;
+ root.style.setProperty('--bg-top',themeSettings.bgTop);root.style.setProperty('--bg-bottom',themeSettings.bgBottom);
+ root.style.setProperty('--accent',themeSettings.accent);root.style.setProperty('--accent-dark',darkenHex(themeSettings.accent));root.style.setProperty('--text-color',themeSettings.text||DEFAULT_THEME.text);
+ document.body.style.color=themeSettings.text||DEFAULT_THEME.text;
+ const bg=document.getElementById('theme-bg'),ac=document.getElementById('theme-accent'),tx=document.getElementById('theme-text');if(bg)bg.value=themeSettings.bgTop;if(ac)ac.value=themeSettings.accent;if(tx)tx.value=themeSettings.text||DEFAULT_THEME.text;
+ try{localStorage.setItem(THEME_KEY,JSON.stringify(themeSettings));}catch(e){}
+}
+function loadTheme(){
+ // Restore the saved theme on startup; use Original only when no valid saved theme exists.
+ try{
+  const saved=JSON.parse(localStorage.getItem(THEME_KEY)||'null');
+  if(saved && typeof saved==='object'){
+   const mode=['original','light','dark'].includes(saved.mode)?saved.mode:'original';
+   const preset=mode==='light'?LIGHT_THEME:mode==='dark'?DARK_THEME:DEFAULT_THEME;
+   themeSettings={mode,bgTop:normalizeHex(saved.bgTop,preset.bgTop),bgBottom:normalizeHex(saved.bgBottom,preset.bgBottom),accent:normalizeHex(saved.accent,preset.accent),text:normalizeHex(saved.text,preset.text)};
+  } else themeSettings={...DEFAULT_THEME};
+ }catch(e){themeSettings={...DEFAULT_THEME};}
+ applyTheme();
+}
+function setThemeMode(mode){if(mode==='light')themeSettings={...LIGHT_THEME};else if(mode==='dark')themeSettings={...DARK_THEME};else themeSettings={...DEFAULT_THEME};applyTheme();}
+function setThemeColor(which,color){color=normalizeHex(color,which==='text'?DEFAULT_THEME.text:'#9a49aa');if(which==='bg'){themeSettings.bgTop=color;themeSettings.bgBottom=color;}else if(which==='accent')themeSettings.accent=color;else if(which==='text')themeSettings.text=color;applyTheme();}
+function exportSettings(){
+ const payload={format:'ScoreCounterSettings',version:1,exportedAt:new Date().toISOString(),players:playerData.map(p=>({...p})),theme:{...themeSettings},sidebar:{position:sidebarPos,always:sidebarAlways},statistics:stats};
+ const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='sc-settings.json';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+}
+function importSettingsFile(input){const file=input.files&&input.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const d=JSON.parse(reader.result);let imported=d.players||d.playerData||d;if(!Array.isArray(imported)||imported.length<2||!imported.every(p=>p&&typeof p.name==='string'&&typeof p.color==='string'))throw new Error('This file does not contain at least two valid players.');const seen=new Set();playerData=imported.map((p,i)=>{let name=p.name.trim().slice(0,32);if(!name||seen.has(name.toLowerCase()))throw new Error('Player names must be non-empty and unique.');seen.add(name.toLowerCase());return{id:String(p.id||('p_import_'+Date.now().toString(36)+'_'+i)),name,color:normalizeHex(p.color,'#777777'),role:p.role==='Queen'?'Queen':'King'};});
+ if(d&&d.theme){const preset=d.theme.mode==='light'?LIGHT_THEME:d.theme.mode==='dark'?DARK_THEME:DEFAULT_THEME;themeSettings={mode:['original','light','dark'].includes(d.theme.mode)?d.theme.mode:'original',bgTop:normalizeHex(d.theme.bgTop,preset.bgTop),bgBottom:normalizeHex(d.theme.bgBottom,preset.bgBottom),accent:normalizeHex(d.theme.accent,preset.accent),text:normalizeHex(d.theme.text,preset.text)};applyTheme();}
+ if(d&&d.sidebar){if(['left','right','top','bottom'].includes(d.sidebar.position))sidebarPos=d.sidebar.position;if(typeof d.sidebar.always==='boolean')sidebarAlways=d.sidebar.always;applySidebarLayout();}
+ if(d&&d.statistics&&d.statistics.players&&Array.isArray(d.statistics.results)){stats=d.statistics;saveStats();}
+ syncPlayerData();savePlayerData();renderPlayerEditor();resetPlayerGames();ensureStats();updateColors();renderStatistics();alert('Import complete. Player names and colors have been imported'+(d.theme||d.sidebar||d.statistics?'; included settings were also restored.':'.'));
+ }catch(e){alert('Could not import this file: '+e.message);}input.value='';};reader.readAsText(file);}
+function openResetModal(){document.getElementById('reset-modal').hidden=false;}
+function closeResetModal(){document.getElementById('reset-modal').hidden=true;}
+function applySelectedReset(){
+ if(document.getElementById('reset-colors').checked){themeSettings={...DEFAULT_THEME};applyTheme();}
+ if(document.getElementById('reset-players').checked){playerData=defaultPlayerData.map(p=>({...p}));syncPlayerData();savePlayerData();renderPlayerEditor();resetPlayerGames();}
+ else if(document.getElementById('reset-player-colors').checked){playerData.forEach((p,i)=>{const def=defaultPlayerData.find(d=>d.id===p.id)||defaultPlayerData[i%defaultPlayerData.length];p.color=def.color;});syncPlayerData();savePlayerData();renderPlayerEditor();updateColors();if(kingQueen)renderKingQueen();if(bracket)renderBracket();}
+ if(document.getElementById('reset-sidebar').checked){sidebarPos='left';sidebarAlways=true;applySidebarLayout();}
+ if(document.getElementById('reset-stats').checked){stats={players:{},results:[],modes:{bracket:0,kingQueen:0,score:0}};ensureStats();saveStats();renderStatistics();}
+ updateColors();renderStatistics();closeResetModal();
+}
+function clearAllSettings(){if(!confirm('Clear all settings, players, player colors, sidebar preferences, and statistics? This cannot be undone.'))return;themeSettings={...DEFAULT_THEME};applyTheme();playerData=defaultPlayerData.map(p=>({...p}));syncPlayerData();savePlayerData();sidebarPos='left';sidebarAlways=true;applySidebarLayout();stats={players:{},results:[],modes:{bracket:0,kingQueen:0,score:0}};ensureStats();saveStats();renderPlayerEditor();resetPlayerGames();updateColors();renderStatistics();['reset-colors','reset-players','reset-player-colors','reset-sidebar','reset-stats'].forEach(id=>document.getElementById(id).checked=false);closeResetModal();}
+loadTheme();
+syncPlayerData();ensureStats();
+applySidebarLayout();
+renderPlayerEditor();updateColors();updateTarget();renderStatistics();
+</script>
+</body>
+</html>
+
+<style>
+/* Full-page bracket match view and larger two-player bracket */
+#bracketGame:fullscreen #bracketMatchScreen{box-sizing:border-box;}
+#bracketGame:fullscreen .bracket-layout:not(.four-player-layout):not(.double-bracket) .bracket-dynamic-match{width:min(92vw,1500px);padding:clamp(32px,7vh,90px);border-radius:24px;}
+#bracketGame:fullscreen .bracket-layout:not(.four-player-layout):not(.double-bracket) .match-row{font-size:clamp(34px,6vw,76px);padding:clamp(24px,5vh,64px);}
+#bracketGame:fullscreen .bracket-layout:not(.four-player-layout):not(.double-bracket) .match-score{font-size:clamp(42px,7vw,84px);}
+</style>
+
+<style>
+/* Bracket matches reuse the main Score Counter team-card and scoring controls. */
+#bracketGame .bracket-match-screen{position:fixed;inset:0;z-index:99999;width:100vw;height:100vh;min-height:100vh;overflow:auto;box-sizing:border-box;background:linear-gradient(165deg,var(--bg-top),var(--bg-bottom));display:flex;flex-direction:column;justify-content:center;align-items:center;gap:18px;padding:clamp(16px,3vw,40px)}
+#bracketGame .bracket-match-scoreboard{width:min(1200px,100%);grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:18px;align-items:stretch}
+#bracketGame .bracket-match-player{min-height:0;gap:0;padding:20px 16px 22px;border:6px solid rgba(255,255,255,.38);border-radius:16px;box-shadow:0 7px 0 var(--team-dark);background:var(--team);text-align:center;display:flex;flex-direction:column;align-items:stretch;justify-content:center}
+#bracketGame .bracket-match-player h2{font:normal clamp(18px,3vw,27px) 'Titan One',sans-serif;margin:0 0 12px;overflow-wrap:anywhere}
+#bracketGame .bracket-match-player-score{font:normal clamp(70px,13vw,112px)/1.1 'Titan One',sans-serif;text-shadow:3px 3px rgba(0,0,0,.16);margin:14px 0}
+#bracketGame .bracket-match-player-controls{display:flex;gap:8px;width:100%;align-items:stretch;flex-wrap:nowrap;justify-content:center}
+#bracketGame .bracket-match-player-controls .btn{width:100%;min-width:0;background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.5);font-size:16px;padding:13px 8px}
+#bracketGame .bracket-match-player-controls .score-minus{flex:0 0 58px;font-size:24px;padding:8px 10px;background:rgba(0,0,0,.2)!important;border-color:rgba(255,255,255,.45)!important}
+#bracketGame .bracket-match-vs{align-self:center;font-weight:950;font-size:clamp(18px,3vw,32px)}
+#bracketGame .bracket-match-note{font-weight:800;margin:0 0 4px;opacity:.95}
+#bracketGame:fullscreen .bracket-match-player{min-height:55vh}
+#bracketGame:fullscreen .bracket-match-player-score{font-size:clamp(80px,13vw,180px)}
+#bracketGame:fullscreen .bracket-match-player h2{font-size:clamp(28px,4vw,58px)}
+#bracketGame:fullscreen .bracket-match-player-controls .btn{font-size:16px;min-width:0}
+#bracketGame:fullscreen .bracket-match-player-controls .score-minus{font-size:clamp(28px,3vw,42px);min-width:88px}
+@media(max-width:650px){#bracketGame .bracket-match-scoreboard{grid-template-columns:1fr}#bracketGame .bracket-match-vs{text-align:center}#bracketGame .bracket-match-player{padding:16px 10px 18px}#bracketGame .bracket-match-player-score{margin:10px 0}}
+</style>
